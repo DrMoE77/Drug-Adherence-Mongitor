@@ -4,15 +4,15 @@ function get_medicine() {
     if (medicine_str !== null) {
         medicine = JSON.parse(todos_str); 
     }
-    return todos;
+    return medicine;
 }
  
 function add() {
-    var task = document.getElementById('task').value;
+    var task = document.getElementById('dispense').value;
  
-    var todos = get_todos();
-    todos.push(task);
-    localStorage.setItem('todo', JSON.stringify(todos));
+    var medicine = get_todos();
+    medicine.push(task);
+    localStorage.setItem('medicine', JSON.stringify(medicine));
  
     show();
  
@@ -25,9 +25,9 @@ if (a.defaultValue==a.value) {a.value=""}
 };
 function remove() {
     var id = this.getAttribute('id');
-    var todos = get_todos();
-    todos.splice(id, 1);
-    localStorage.setItem('todo', JSON.stringify(todos));
+    var todos = get_medicine();
+    medicine.splice(id, 1);
+    localStorage.setItem('medicine', JSON.stringify(medicine));
  
     show();
  
@@ -35,11 +35,11 @@ function remove() {
 }
  
 function show() {
-    var todos = get_todos();
+    var todos = get_medicine();
  
     var html = '<ul>';
-    for(var i=0; i<todos.length; i++) {
-        html += '<li>' + todos[i] + '<button class="remove" id="' + i  + '">Delete</button> </li>';
+    for(var i=0; i<medicine.length; i++) {
+        html += '<li>' +medicine[i] + '<button class="remove" id="' + i  + '">Delete</button> </li>';
     };
     html += '</ul>';
  
