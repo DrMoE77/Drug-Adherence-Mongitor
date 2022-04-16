@@ -1,18 +1,18 @@
-function get_wrapper() {
-    var wrapper = new Array;
-    var wrapper_str = localStorage.getItem('todo');
-    if (wrapper_str !== null) {
-        wrapper = JSON.parse(todos_str); 
+function get_medoclock() {
+    var medoclock = new Array;
+    var medoclcock_str = localStorage.getItem('todo');
+    if (medoclock_str !== null) {
+        medoclock = JSON.parse(medoclock_str); 
     }
     return todos;
 }
  
 function add() {
-    var task = document.getElementById('task').value;
+    var medicine = document.getElementById('medicine').value;
  
-    var todos = get_todos();
-    todos.push(task);
-    localStorage.setItem('todo', JSON.stringify(todos));
+    var medoclock = get_medoclock();
+    medoclock.push(medicine);
+    localStorage.setItem('medicine', JSON.stringify(medicine));
  
     show();
  
@@ -25,9 +25,9 @@ if (a.defaultValue==a.value) {a.value=""}
 };
 function remove() {
     var id = this.getAttribute('id');
-    var todos = get_todos();
-    todos.splice(id, 1);
-    localStorage.setItem('todo', JSON.stringify(todos));
+    var medicine = get_medicine();
+    medicine.splice(id, 1);
+    localStorage.setItem('medicine', JSON.stringify(medicine));
  
     show();
  
@@ -35,11 +35,11 @@ function remove() {
 }
  
 function show() {
-    var todos = get_todos();
+    var medicine = get_medicine();
  
     var html = '<ul>';
-    for(var i=0; i<todos.length; i++) {
-        html += '<li>' + todos[i] + '<button class="remove" id="' + i  + '">Delete</button> </li>';
+    for(var i=0; i<medicine.length; i++) {
+        html += '<li>' + medicine[i] + '<button class="remove" id="' + i  + '">Delete</button> </li>';
     };
     html += '</ul>';
  
