@@ -1,12 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+    <link rel="stylesheet" href="styles.css">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<h1>General Practitioner Form</h1>
+<h1>Communications between the General Practitioner (GP) and the Community Pharmacist (CP)</h1>
+<h2>Clinical Interactions</h2>
+
 <body>
+
+    <form id= "newActivity" action="">
+        <label for="email">Email</label>
+        <input id =email type="email" name =email>
+        <label for="firstName">First name:</label>
+        <input id= "firstName"type= "text" name= "firstName">
+        <label for="lastName">Last Name:</label>
+        <input id= "lastName"type= "text" name= "lastName">
+        <label for="researchID">Research Identifcation Number (RID):</label>
+        <input id= "researchID"type= "text" name ="researchID">
     
+    <p>
+        <strong>Question 1 </strong>
+    </p>
+    <p>As a GP how often do you have to interact with the pharmacist on a daily basis?</p>
+    <label for="quesTionone">Question One Answer:</label>
+        <input id= "quesTionone"type= "text">
+        
+    <p>
+        <strong>Question 2</strong>
+
+        
+    </p>
+    <p>Do you feel that the pharmacist would be <span>inteferring</span> in your Clinical judgment when alerting you to a medication
+        related issue?</p>
+        <label for="quesTiontwo">Question two Answer:</label>
+        <input id= "quesTiontwo"type= "text">
+        
+    <p>
+        <strong>Question 3</strong>
+    </p>
+    <p class="y">Do you find Home Medcicines Review to be a vailable tool in your practise?</p>
+    <label for="quesTionthree">Question Three Answer:</label>
+        <input id= "quesTionthree"type= "text">
+        
+    <p>
+        
+        <strong>Question 4</strong>
+    </p>
+    <p>The AACP recommends two page reports for HMRs. Would you prefer a one page reprot?</p>
+    <label for="quesTionfour">Question Four Answer:</label>
+        <input id= "quesTionfour"type= "text">
+        
+    <p>
+        <strong>Question 5</strong>
+    </p>
+    <p>Do you find that have a long standing relationship with the CP makes the communications more efficient? </p>
+    <label for="quesTionfive">Question Five Answer:</label>
+        <input id= "quesTionfive"type= "text">
+    
+        
+    <input id= "saveForm" type ="submit" value="submit">
+
+</form>
 </body>
+<script src="https://www.gstatic.com/firebasejs/3.1.0/firebase.js"></script>
+
+
 </html>
