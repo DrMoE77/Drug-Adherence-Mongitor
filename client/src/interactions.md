@@ -10,9 +10,9 @@ Irbesartan Hydrochlorothiazide  + Sitagliptin
 
 
 
-Irbesartan HCTZ + Metformin 
+Irbesartan Hydrochlorothiazide + Metformin 
 
-Thiazide diuretics can reduce the hypoglycemic effects of metformin. It could minimise insulin secretion and cause hypokalaemia[18]. Potassium depletion causes glucose intolerance and impaired insulin secretion [19].  Thiazide diuretics cause Hypokalemia and lack of body potassium [20]. Mr Boyd's BGLs should be monitored frequently to assess worsening diabetic control. 
+Thiazide diuretics can reduce the hypoglycemic effects of metformin. It could minimise insulin secretion and cause hypokalaemia. Potassium depletion causes glucose intolerance and impaired insulin secretion.  Thiazide diuretics cause Hypokalemia and lack of body potassium. Blood Glucose Levelss should be monitored frequently to assess worsening diabetic control. 
 
 
 
