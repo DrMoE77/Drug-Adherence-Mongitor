@@ -14,7 +14,7 @@
 
 <body>
 
-    <form id= "newActivity" action="">
+    <form method="post"  id= "newActivity" action="/patient_data">
         <label for="email">Email</label>
         <input id =email type="email" name =email>
         <label for="firstName">First name:</label>
@@ -29,7 +29,7 @@
     </p>
     <p>Enter Drug Name</p>
     <label for="quesTionone"></label>
-        <input id= "quesTionone"type= "text">
+        <input name = "drugName" id= "quesTionone"type= "text">
         
     <p>
         <strong>Dosage</strong>
@@ -38,14 +38,14 @@
     </p>
     <p>Enter Drug Dosage</p>
         <label for="quesTiontwo"></label>
-        <input id= "quesTiontwo"type= "text">
+        <input name = "drugDosage" id= "quesTiontwo"type= "text">
         
     <p>
         <strong>Frequency</strong>
     </p>
     <p class="y">Enter Frequency</p>
     <label for="quesTionthree"></label>
-        <input id= "quesTionthree"type= "text">
+        <input name = "drugFrequency" id= "quesTionthree"type= "text">
         
     <p>
         
@@ -53,14 +53,14 @@
     </p>
     <p>Repeats</p>
     <label for="quesTionfour"></label>
-        <input id= "quesTionfour"type= "text">
+        <input name = "repeatNumber"id= "quesTionfour"type= "text">
         
     <p>
         <strong>Number of Repeats Left</strong>
     </p>
-    <p>Repeats to be Filled </p>
+    <p>Repeats Filled </p>
     <label for="quesTionfive"></label>
-        <input id= "quesTionfive"type= "text">
+        <input name = "repeatsFilled" id= "quesTionfive"type= "text">
     
         
     <input id= "saveForm" type ="submit" value="submit">
