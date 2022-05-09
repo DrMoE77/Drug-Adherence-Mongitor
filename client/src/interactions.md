@@ -20,5 +20,5 @@ Thiazide diuretics can reduce the hypoglycemic effects of metformin. It could mi
 
 
 Rabeprazole + Metformin  
-Concomitant administration of PPIs with Metformin significantly increased plasma metformin [21]. Because Proton pump inhibitors (PPIs) may inhibit organic cation transporters (OCTs), resulting in increased serum levels of metformin (a substrate of OCT) [3]. 
+Concomitant administration of PPIs with Metformin significantly increases plasma metformin . Because Proton pump inhibitors (PPIs) may inhibit organic cation transporters (OCTs), resulting in increased serum levels of metformin (a substrate of OCT). 
 
