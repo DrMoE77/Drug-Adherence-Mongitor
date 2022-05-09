@@ -3,9 +3,8 @@ Drug -Drug interactions
 
 Sodium-glucose co-transporter 2 (SGLT2 inhibitors and thiazide diuretics combined increase the diuretic effects, causing an electrolyte imbalance in the patient. Nonetheless, it is more common with loop diuretics. It would Increase the urinary sodium excretion. And increase urine output. Monitor for signs of toxicity – e.g. Hypotension or renal impairment . 
 
-Irbesartan HCTZ  + Sitagliptin 
-
-Mr Boyd should be monitored for signs and symptoms of angioedema [3]. 
+Irbesartan Hydrochlorothiazide  + Sitagliptin 
+ monitor for signs and symptoms of angioedema. 
 
 
 
