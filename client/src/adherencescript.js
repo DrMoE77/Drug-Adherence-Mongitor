@@ -1,10 +1,3 @@
-var = adherencePercentage = "";
-
-function adherencePercentage() {
-  console.log()
-  
-};
-
-
-adherencePercentage();
-
+function percentage(partialValue, totalValue) {
+  return (100 * partialValue) / totalValue;
+} 
