@@ -1,32 +1,53 @@
-# Drug Adherence Monitor
-  [![License used: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# MERN Stack | Login, Register and CRUD app
+Simlple example of user registration, login and CRUD action with backend restAPI using mongoDB, Nodejs(Express.js) and mongoose, authentication using JWT token also pagination and frontend using react.js and material-ui api calling with axios.
 
-  ## Description
-  This is an app that allows both patient and doctor to follow up on any medication related issues. These include adherence to the medication by the patient, and drug - drug interactions and alert reminder for the patient to have their dose. 
+[![flow](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/development/MERN.gif)
 
-  ## Table of Contents
-  * [Usage](#usage)
-  * [Installation](#installation)
-  * [License](#license)
-  * [Contributing to this project](#contributions)
-  * [Tests](#tests)
-  * [Contact](#contact)
-  
-  ## Usage
-  As a doctor I want to be able to track my patients' medication adehrence as this will affect my judgment as to wether to increase a paticular dose or wehter the patient has been non-complient and I do not unnecessarily need to increase their dose. As the patient I want to be able to see if my medications have serios interactions and be alerted to when my dose is due. Additionally I want to be abke to see if my prescribed meds will interact with my OTC meds.
+### This Project is a Simple ReactJS Project which demonstrates the following
+##### Backend
+- API to register and login user.
+- API using which loged in user can add, edit and update it's product.
+- Pagination API to give list of perticular user's added product.
+- JWT token authentication.
 
-  ## Installation 
-  Mongoose, Express, React, Node.
+##### Frontend
+- Creating a Component in React and creat routing.
+- Using react and material UI created form to login user and can register new user.
+- Product add, edit, delete and pagination also you can search product by name.
+- Making HTTP calls using Axios.
+- Calling multipart api with image upload.
 
-  ## License
-  [![License used: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+### Prerequisites
+Below noted things you need to install to run this project in your system
 
-  ## Contributing to this project
-  no contribution required.
+- Node.js
+- NPM
+- MongoDB
 
-  ## Tests
-  there are not testing instructions.
+### To Setup
+Clone or download this repository
 
-  ## Contact
-  My GitHub: (https://github.com/https://github.com/DrMoE77) <br>
-  Email me at: drmo.afifi@gmail.com
+1. `cd Registration-and-Login-using-MERN-stack/backend`
+2. `npm install`
+3. `cd Registration-and-Login-using-MERN-stack/frontend`
+4. `npm install`
+
+### To Run
+To run node server
+1. `cd Registration-and-Login-using-MERN-stack/backend`
+2. `node server.js`
+
+To run react frontend
+1. `cd Registration-and-Login-using-MERN-stack/frontend`
+2. `npm start`
+
+<!-- ### Login and Register screen
+[![login](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/login.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/login.png)[![register](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/register.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/register.png)
+
+### Product Add and Edit screen
+[![add](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/add.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/add.png)  [![edit](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/edit.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/edit.png)
+
+### Product Pagination screen
+[![dashboard](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/dashboard.png)](https://github.com/FSojitra/Registration-Login-and-CRUD-Action-using-MERN-stack/blob/master/dashboard.png) -->
+
+### Do not forget to leave a star! :hugs:
