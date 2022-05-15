@@ -7,3 +7,4 @@ function adherance(){
   return adh
 }
 document.getElementById("adhresult").innerHTML = adherance()+"%"
+// To do Adhderence vs Drug Burden Index
