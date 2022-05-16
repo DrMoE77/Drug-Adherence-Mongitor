@@ -10,6 +10,7 @@ export default class Register extends React.Component {
       username: '',
       password: '',
       confirm_password: '',
+      mobile_nr: '',
       gender: '',
       type: ''
     };
@@ -22,6 +23,9 @@ export default class Register extends React.Component {
     axios.post('http://localhost:2000/register', {
       username: this.state.username,
       password: this.state.password,
+      mobile_nr: this.state.mobile_nr,
+      gender: this.state.gender,
+      type: this.state.type
     }).then((res) => {
       swal({
         text: res.data.title,

@@ -1,1 +1,0 @@
-Adherence% = No. of Adherent doses/Expected doses for monitoring period

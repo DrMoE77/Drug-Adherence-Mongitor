@@ -7,36 +7,22 @@ var multer = require('multer'),
   bodyParser = require('body-parser'),
   path = require('path');
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/medDB");
+mongoose.connect("mongodb://127.0.0.1:27017/medDB");
 var fs = require('fs');
 var patient = require("./model/patient.js");
 var user = require("./model/user.js");
-const scheduler = require("./scheduler");
 
-var dir = './uploads';
-var upload = multer({
-  storage: multer.diskStorage({
+// Load configuration from .env file
+require('dotenv').config();
 
-    destination: function (req, file, callback) {
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir);
-      }
-      callback(null, './uploads');
-    },
-    filename: function (req, file, callback) { callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); }
+// Load and initialize MesageBird SDK
+var messagebird = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 
-  }),
+// Set up Appointment "Database"
+var AppointmentDatabase = [];
 
-  fileFilter: function (req, file, callback) {
-    var ext = path.extname(file.originalname)
-    if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
-      return callback(/*res.end('Only images are allowed')*/ null, false)
-    }
-    callback(null, true)
-  }
-});
+
 app.use(cors());
-app.use(express.static('uploads'));
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: false
@@ -184,12 +170,11 @@ function checkUserAndGenerateToken(data, req, res) {
 /* Api to add drug */
 app.post("/add-drug", upload.any(), (req, res) => {
   try {
-    if (req.body && req.body.patient_name && req.body.drug_name && req.body.dosage &&
-      req.body.frequency) {
+    if (req.body.drug_name && req.body.dosage && req.body.frequency && req.body.adherence) {
 
       let new_drug = new drug();
-      new_drug.patient_name = req.body.patient_name;
-      new_drug.patient_drug = req.body.drug_name;
+      
+      new_drug.drug_name = req.body.drug_name;
       new_drug.dosage = req.body.dosage;
       new_drug.frequency = req.body.frequency;
       new_drug.adherence = req.body.adherence;
@@ -318,3 +303,21 @@ app.post("/delete-drug", (req, res) => {
 app.listen(2000, () => {
   console.log("Server is Runing On port 2000");
 });
+// create a Twilio client
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
+async function sendScheduledSms() {
+  // schedule message to be sent 61 minutes after current time
+  const sendWhen = new Date(new Date().getTime() + 61 * 60000);
+
+  // send the SMS
+  const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
+  const message = await client.messages.create({
+    from: messagingServiceSid,
+    to: '+1xxxxxxxxxx',  // ← your phone number here
+    body: 'Friendly reminder that you have an appointment with us next week.',
+    scheduleType: 'fixed',
+    sendAt: sendWhen.toISOString(),
+  });
