@@ -321,3 +321,8 @@ async function sendScheduledSms() {
     scheduleType: 'fixed',
     sendAt: sendWhen.toISOString(),
   });
+
+  console.log(message.sid);
+}
+
+sendScheduledSms();
