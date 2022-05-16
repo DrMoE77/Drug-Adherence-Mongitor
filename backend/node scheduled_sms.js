@@ -11,7 +11,7 @@ async function sendScheduledSms() {
   const messagingServiceSid = process.env.TWILIO_MESSAGING_SERVICE_SID;
   const message = await client.messages.create({
     from: messagingServiceSid,
-    to: '+1xxxxxxxxxx',  // ← your phone number here
+    to: '+61414422632',  // ← your phone number here
     body: 'Friendly reminder that you have an appointment with us next week.',
     scheduleType: 'fixed',
     sendAt: sendWhen.toISOString(),
