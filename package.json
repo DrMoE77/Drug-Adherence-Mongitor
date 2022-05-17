@@ -1,23 +1,19 @@
 {
-  "name": "drug_api",
+  "name": "dam3",
   "version": "1.0.0",
-  "description": "Api for drug",
-  "main": "server.js",
+  "description": "[![License used: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "MIT",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "imdb-api": "^4.4.1",
-    "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^3.1.2",
-    "mongodb": "^4.6.0",
-    "mongoose": "^5.13.14",
-    "multer": "^1.4.2",
-    "twilio": "^3.77.0"
-  }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DrMoE77/Drug-Adherence-Monitor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DrMoE77/Drug-Adherence-Monitor/issues"
+  },
+  "homepage": "https://github.com/DrMoE77/Drug-Adherence-Monitor#readme"
 }
