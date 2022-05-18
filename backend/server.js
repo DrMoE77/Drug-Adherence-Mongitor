@@ -7,11 +7,12 @@ var multer = require('multer'),
   bodyParser = require('body-parser'),
   path = require('path');
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://127.0.0.1:27017/medDB");
+const db = require('./config/connection');
 var fs = require('fs');
 var patient = require("./model/patient.js");
 var user = require("./model/user.js");
 
+const PORT = process.env.PORT || 3001;
 // Load configuration from .env file
 require('dotenv').config();
 
@@ -300,6 +301,9 @@ app.post("/delete-drug", (req, res) => {
 //scheduler.start();
 
 
-app.listen(2000, () => {
-  console.log("Server is Runing On port 2000");
-});
+db.once('open', () => {
+  app.listen(PORT, () => {
+    console.log(`API server running on port ${PORT}!`);;
+  })
+})
+
