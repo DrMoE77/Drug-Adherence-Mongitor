@@ -5,7 +5,7 @@ const axios = require('axios');
 const bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
 
-export default class Login extends React.Component {
+export default class doc_Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,17 +16,18 @@ export default class Login extends React.Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  login = () => {
+
+  doc_login = () => {
 
     const pwd = bcrypt.hashSync(this.state.password, salt);
 
-    axios.post('http://localhost:2000/login', {
+    axios.post('http://localhost:2000/doc_login', {
       username: this.state.username,
       password: pwd,
     }).then((res) => {
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user_id', res.data.id);
-      this.props.history.push('/dashboard');
+      this.props.history.push('/doc_dashboard');
     }).catch((err) => {
       if (err.response && err.response.data && err.response.data.errorMessage) {
         swal({
@@ -37,13 +38,14 @@ export default class Login extends React.Component {
       }
     });
   }
+
    
   render() {
     return (
       <div className='mainDiv' style={{ marginTop: '200px' }}>
 
         <div>
-          <h2>Patient Login</h2>
+          <h2>Doctor Login</h2>
         </div>
 
         <div>
@@ -72,7 +74,7 @@ export default class Login extends React.Component {
 
           <Link href="/register">
             First time here?
-          </Link> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          </Link>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
           <Button
             className="button_style"
@@ -80,15 +82,13 @@ export default class Login extends React.Component {
             color="primary"
             size="small"
             disabled={this.state.username === '' && this.state.password === ''}
-            onClick={this.login}
+            onClick={this.doc_login}
           >
             Login
-          </Button> 
+          </Button>
 
-          
         </div>
       </div>
     );
   }
 }
-

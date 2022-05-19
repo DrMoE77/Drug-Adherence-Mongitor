@@ -32,7 +32,12 @@ export default class Register extends React.Component {
         icon: "success",
         type: "success"
       });
-      this.props.history.push('/');
+      if(this.state.type==="Patient"){
+        this.props.history.push('/login');
+      }
+      else{
+        this.props.history.push('/doc_login');
+      }
     }).catch((err) => {
       swal({
         text: err.response.data.errorMessage,
@@ -44,7 +49,7 @@ export default class Register extends React.Component {
 
   render() {
     return (
-      <div style={{ marginTop: '150px' }}>
+      <div className='mainDiv' style={{ marginTop: '100px' }}>
         <div>
           <h2>Register</h2>
         </div>
@@ -94,9 +99,30 @@ export default class Register extends React.Component {
             required
           />
           <br /><br />
-          <label type="text" value="Gender">Gender at birth:</label>
+
+          <label type="text" value="User type">User Type:</label>
           <input 
-            id="standard-basic"
+            id="radioDoctor"
+            type="radio" 
+            value="Doctor" 
+            name="type"
+            onChange={this.onChange} 
+            required
+          />Doctor
+          
+          <input  
+            id="radioPatient"
+            type="radio" 
+            value="Patient" 
+            name="type"
+            onChange={this.onChange} 
+            required
+          /> Patient
+          <br /><br />
+
+          <label id='labelGender' type="text" value="Gender">Gender at birth:</label>
+          <input 
+            id='radioMale'
             type="radio" 
             value="Male" 
             name="gender"
@@ -104,8 +130,8 @@ export default class Register extends React.Component {
             required
           /> Male
           
-          <input 
-            id="standard-basic"
+          <input
+            id='radioFemale'
             type="radio" 
             value="Female" 
             name="gender"
@@ -114,25 +140,10 @@ export default class Register extends React.Component {
           /> Female
           <br /><br />
 
-          <label type="text" value="User type">User Type:</label>
-          <input 
-            id="standard-basic"
-            type="radio" 
-            value="Doctor" 
-            name="type"
-            onChange={this.onChange} 
-            required
-          />Doctor
-          
-          <input 
-            id="standard-basic"
-            type="radio" 
-            value="Patient" 
-            name="type"
-            onChange={this.onChange} 
-            required
-          /> Patient
-          <br /><br />
+          <Link href="/login">
+            Already a user?
+          </Link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
           <Button
             className="button_style"
             variant="contained"
@@ -142,10 +153,8 @@ export default class Register extends React.Component {
             onClick={this.register}
           >
             Register
-          </Button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <Link href="/">
-            Login
-          </Link>
+          </Button> 
+          
         </div>
       </div>
     );

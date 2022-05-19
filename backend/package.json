@@ -16,7 +16,6 @@
     "imdb-api": "^4.4.1",
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^3.1.2",
-    "messagebird": "^3.8.0",
     "mongodb": "^4.6.0",
     "mongoose": "^5.13.14",
     "multer": "^1.4.2",

@@ -57,11 +57,6 @@ export default class Dashboard extends Component {
     }).then((res) => {
       this.setState({ loading: false, drugs: res.data.drugs, pages: res.data.pages });
     }).catch((err) => {
-      swal({
-        text: err.response.data.errorMessage,
-        icon: "error",
-        type: "error"
-      });
       this.setState({ loading: false, drugs: [], pages: 0 },()=>{});
     });
   }
@@ -116,17 +111,17 @@ export default class Dashboard extends Component {
   };
 
   addDrug = () => {
+    
+    const field = new FormData();
+    
+    field.append('patient_name', this.state.patient_name);
+    field.append('drug_name', this.state.drug_name);
+    field.append('dosage', this.state.dosage);
+    field.append('frequency', this.state.frequency);
+    field.append('adherence', this.state.adherence);
+    field.append('reason', this.state.reason);
 
-    const file = new FormData();
-    file.append('id', this.state.id);
-    file.append('patient_name', this.state.patient_name);
-    file.append('drug_name', this.state.drug_name);
-    file.append('dosage', this.state.dosage);
-    file.append('frequency', this.state.frequency);
-    file.append('adherence', this.state.adherence);
-    file.append('reason', this.state.reason);
-
-    axios.post('http://localhost:2000/add-drug', file, {
+    axios.post('http://localhost:2000/add-drug', field, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
@@ -140,7 +135,7 @@ export default class Dashboard extends Component {
       });
 
       this.handleDrugClose();
-      this.setState({ name: '', desc: '', discount: '', price: '', file: null, page: 1 }, () => {
+      this.setState({ patient_name: '', drug_name: '', dosage: '', frequency: '', adherence:'', reason: '',page: 1 }, () => {
         this.getDrug();
       });
     }).catch((err) => {
@@ -179,7 +174,7 @@ export default class Dashboard extends Component {
       });
 
       this.handleDrugEditClose();
-      this.setState({ name: '', desc: '', discount: '', price: '', file: null }, () => {
+      this.setState({ patient_name: '', drug_name: '', dosage: '', frequency: '', adherence:'', reason: '',file: null, page: 1 }, () => {
         this.getDrug();
       });
     }).catch((err) => {
@@ -228,10 +223,10 @@ export default class Dashboard extends Component {
 
   render() {
     return (
-      <div>
+      <div className='mainDiv'>
         {this.state.loading && <LinearProgress size={40} />}
         <div>
-          <h2>Dashboard</h2>
+          <h2>Patient's Dashboard</h2>
           <Button
             className="button_style"
             variant="contained"
@@ -272,7 +267,7 @@ export default class Dashboard extends Component {
             /><br />
             <TextField
               id="standard-basic"
-              type="text"
+              type="number"
               autoComplete="off"
               name="dosage"
               value={this.state.dosage}
@@ -296,6 +291,7 @@ export default class Dashboard extends Component {
             <Button onClick={this.handleDrugEditClose} color="primary">
               Cancel
             </Button>
+            
             <Button
               disabled={this.state.patient_name === '' || this.state.drug_name === '' || this.state.dosage === '' || this.state.frequency === '' || this.state.adherence === '' || this.state.reason === ''}
               onClick={(e) => this.updateDrug()} color="primary" autoFocus>
@@ -313,6 +309,16 @@ export default class Dashboard extends Component {
         >
           <DialogTitle id="alert-dialog-title">Add Drug</DialogTitle>
           <DialogContent>
+          <TextField
+              id="standard-basic"
+              type="text"
+              autoComplete="off"
+              name="patient_name"
+              value={this.state.patient_name}
+              onChange={this.onChange}
+              placeholder="Patient Name"
+              required
+            /><br />
             <TextField
               id="standard-basic"
               type="text"
@@ -325,7 +331,7 @@ export default class Dashboard extends Component {
             /><br />
             <TextField
               id="standard-basic"
-              type="text"
+              type="number"
               autoComplete="off"
               name="dosage"
               value={this.state.dosage}
@@ -353,6 +359,16 @@ export default class Dashboard extends Component {
               placeholder="Adherence"
               required
             /><br />
+            <TextField
+              id="standard-basic"
+              type="text"
+              autoComplete="off"
+              name="reason"
+              value={this.state.reason}
+              onChange={this.onChange}
+              placeholder="Reason"
+              required
+            /><br />
             
           </DialogContent>
 
@@ -361,7 +377,7 @@ export default class Dashboard extends Component {
               Cancel
             </Button>
             <Button
-              disabled={this.state.drug_name === '' || this.state.dosage === '' || this.state.frequency === '' || this.state.adherence === ''}
+              disabled={this.state.drug_name === '' || this.state.dosage === '' || this.state.frequency === ''}
               onClick={(e) => this.addDrug()} color="primary" autoFocus>
               Add Drug
             </Button>
@@ -384,12 +400,13 @@ export default class Dashboard extends Component {
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="center">Patient Name</TableCell>
+                
                 <TableCell align="center">Drug Name</TableCell>
                 <TableCell align="center">Dosage</TableCell>
                 <TableCell align="center">Frequency</TableCell>
                 <TableCell align="center">Adherence</TableCell>
                 <TableCell align="center">Reason</TableCell>
+                <TableCell align="center">Action</TableCell>
                
               </TableRow>
             </TableHead>
@@ -428,6 +445,7 @@ export default class Dashboard extends Component {
             </TableBody>
           </Table>
           <br />
+          
           <Pagination count={this.state.pages} page={this.state.page} onChange={this.pageChange} color="primary" />
         </TableContainer>
 

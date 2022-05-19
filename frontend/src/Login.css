@@ -1,6 +1,9 @@
 body {
   text-align: center;
-  font-family: 'Roboto', sans-serif;
+  font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
+  background-image: url('../image.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .button_style {
@@ -14,4 +17,14 @@ body {
 
 h2 {
     color: green;
+}
+
+.mainDiv{
+  background-color: white;
+  padding: 50px;
+}
+
+.mainButton{
+  background-color: palegoldenrod;
+  padding: 15px 30px 15px 30px;
 }

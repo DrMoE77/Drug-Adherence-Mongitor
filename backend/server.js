@@ -7,17 +7,22 @@ var multer = require('multer'),
   bodyParser = require('body-parser'),
   path = require('path');
 var mongoose = require("mongoose");
-const db = require('./config/connection');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medDB', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+//const db = require('./config/connection');
 var fs = require('fs');
-var patient = require("./model/patient.js");
+var drug = require("./model/drug.js");
 var user = require("./model/user.js");
-
-const PORT = process.env.PORT || 3001;
+var doc = require("./model/doc.js")
 // Load configuration from .env file
 require('dotenv').config();
 
+const PORT = process.env.PORT || 3000;
+
 // Load and initialize MesageBird SDK
-var messagebird = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
+//var messagebird = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
 
 // Set up Appointment "Database"
 var AppointmentDatabase = [];
@@ -169,12 +174,12 @@ function checkUserAndGenerateToken(data, req, res) {
 }
 
 /* Api to add drug */
-app.post("/add-drug", upload.any(), (req, res) => {
+app.post("/add-drug", (req, res) => {
   try {
-    if (req.body.drug_name && req.body.dosage && req.body.frequency && req.body.adherence) {
+    if (req.body && req.body.drug_name && req.body.dosage && req.body.frequency && req.body.adherence) {
 
       let new_drug = new drug();
-      
+      new_drug.patient_name = req.body.patient_name;
       new_drug.drug_name = req.body.drug_name;
       new_drug.dosage = req.body.dosage;
       new_drug.frequency = req.body.frequency;
@@ -210,12 +215,12 @@ app.post("/add-drug", upload.any(), (req, res) => {
 });
 
 /* Api to edit drug */
-app.post("/update-drug", upload.any(), (req, res) => {
+app.post("/update-drug", (req, res) => {
   try {
     if (req.body && req.body.patient_name && req.body.drug_name && req.body.dosage &&
       req.body.frequency) {
 
-      patient.findById(req.body.id, (err, newdrug) => {
+      drug.findById(req.body.id, (err, new_drug) => {
 
         if (req.body.patient_name) {
           new_drug.patient_name = req.body.patient_name;
@@ -270,7 +275,7 @@ app.post("/update-drug", upload.any(), (req, res) => {
 app.post("/delete-drug", (req, res) => {
   try {
     if (req.body && req.body.id) {
-      patient.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
+      drug.findByIdAndUpdate(req.body.id, { is_delete: true }, { new: true }, (err, data) => {
         if (data.is_delete) {
           res.status(200).json({
             status: true,
@@ -301,9 +306,4 @@ app.post("/delete-drug", (req, res) => {
 //scheduler.start();
 
 
-db.once('open', () => {
-  app.listen(PORT, () => {
-    console.log(`API server running on port ${PORT}!`);;
-  })
-})
 
