@@ -1,4 +1,5 @@
-import React from 'react';
+//importing dependencies
+import React, { Component } from 'react';
 import swal from 'sweetalert';
 import { Button, TextField, Link } from '@material-ui/core';
 const axios = require('axios');
@@ -9,10 +10,7 @@ export default class Register extends React.Component {
     this.state = {
       username: '',
       password: '',
-      confirm_password: '',
-      mobile_nr: '',
-      gender: '',
-      type: ''
+      confirm_password: ''
     };
   }
 
@@ -23,21 +21,13 @@ export default class Register extends React.Component {
     axios.post('http://localhost:2000/register', {
       username: this.state.username,
       password: this.state.password,
-      mobile_nr: this.state.mobile_nr,
-      gender: this.state.gender,
-      type: this.state.type
     }).then((res) => {
       swal({
         text: res.data.title,
         icon: "success",
         type: "success"
       });
-      if(this.state.type==="Patient"){
-        this.props.history.push('/login');
-      }
-      else{
-        this.props.history.push('/doc_login');
-      }
+      this.props.history.push('/');
     }).catch((err) => {
       swal({
         text: err.response.data.errorMessage,
@@ -49,7 +39,7 @@ export default class Register extends React.Component {
 
   render() {
     return (
-      <div className='mainDiv' style={{ marginTop: '100px' }}>
+      <div className="mainDiv" style={{ marginTop: '200px' }}>
         <div>
           <h2>Register</h2>
         </div>
@@ -88,72 +78,19 @@ export default class Register extends React.Component {
             required
           />
           <br /><br />
-          <TextField
-            id="standard-basic"
-            type="text"
-            autoComplete="off"
-            name="mobile_nr"
-            value={this.state.mobile_nr}
-            onChange={this.onChange}
-            placeholder="Mobile Number"
-            required
-          />
-          <br /><br />
-
-          <label type="text" value="User type">User Type:</label>
-          <input 
-            id="radioDoctor"
-            type="radio" 
-            value="Doctor" 
-            name="type"
-            onChange={this.onChange} 
-            required
-          />Doctor
-          
-          <input  
-            id="radioPatient"
-            type="radio" 
-            value="Patient" 
-            name="type"
-            onChange={this.onChange} 
-            required
-          /> Patient
-          <br /><br />
-
-          <label id='labelGender' type="text" value="Gender">Gender at birth:</label>
-          <input 
-            id='radioMale'
-            type="radio" 
-            value="Male" 
-            name="gender"
-            onChange={this.onChange} 
-            required
-          /> Male
-          
-          <input
-            id='radioFemale'
-            type="radio" 
-            value="Female" 
-            name="gender"
-            onChange={this.onChange} 
-            required
-          /> Female
-          <br /><br />
-
-          <Link href="/login">
+          <Link href="/">
             Already a user?
-          </Link>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+          </Link>
           <Button
             className="button_style"
             variant="contained"
             color="primary"
             size="small"
-            disabled={this.state.username === '' && this.state.password === ''}
+            disabled={this.state.username == '' && this.state.password == ''}
             onClick={this.register}
           >
             Register
-          </Button> 
+          </Button> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           
         </div>
       </div>

@@ -1,10 +1,12 @@
-import React from 'react';
+//importing dependencies
+import React, { Component } from 'react';
 import swal from 'sweetalert';
 import { Button, TextField, Link } from '@material-ui/core';
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 var salt = bcrypt.genSaltSync(10);
 
+//declaring the login class 
 export default class Login extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +18,7 @@ export default class Login extends React.Component {
 
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
+  //bcrypt for encrypting password entered by the user
   login = () => {
 
     const pwd = bcrypt.hashSync(this.state.password, salt);
@@ -37,13 +40,12 @@ export default class Login extends React.Component {
       }
     });
   }
-   
+
   render() {
     return (
-      <div className='mainDiv' style={{ marginTop: '200px' }}>
-
+      <div className="mainDiv" style={{ marginTop: '200px' }}>
         <div>
-          <h2>Patient Login</h2>
+          <h2>Login</h2>
         </div>
 
         <div>
@@ -69,26 +71,22 @@ export default class Login extends React.Component {
             required
           />
           <br /><br />
-
           <Link href="/register">
-            First time here?
+            New here?
           </Link> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+          
           <Button
             className="button_style"
             variant="contained"
             color="primary"
             size="small"
-            disabled={this.state.username === '' && this.state.password === ''}
+            disabled={this.state.username == '' && this.state.password == ''}
             onClick={this.login}
           >
             Login
           </Button> 
-
-          
         </div>
       </div>
     );
   }
 }
-

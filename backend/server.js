@@ -1,3 +1,4 @@
+//installing dependencies
 var express = require("express");
 var app = express();
 const bcrypt = require('bcrypt');
@@ -7,28 +8,39 @@ var multer = require('multer'),
   bodyParser = require('body-parser'),
   path = require('path');
 var mongoose = require("mongoose");
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/medDB', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-//const db = require('./config/connection');
+mongoose.connect("mongodb://localhost/medicinesDB");
 var fs = require('fs');
+
+//importing models
 var drug = require("./model/drug.js");
 var user = require("./model/user.js");
-var doc = require("./model/doc.js")
-// Load configuration from .env file
-require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+var dir = './uploads';
 
-// Load and initialize MesageBird SDK
-//var messagebird = require('messagebird')(process.env.MESSAGEBIRD_API_KEY);
+//function for uploading png or jpg files
+var upload = multer({
+  storage: multer.diskStorage({
 
-// Set up Appointment "Database"
-var AppointmentDatabase = [];
+    destination: function (req, file, callback) {
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      callback(null, './uploads');
+    },
+    filename: function (req, file, callback) { callback(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); }
 
+  }),
 
+  fileFilter: function (req, file, callback) {
+    var ext = path.extname(file.originalname)
+    if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
+      return callback(/*res.end('Only images are allowed')*/ null, false)
+    }
+    callback(null, true)
+  }
+});
 app.use(cors());
+app.use(express.static('uploads'));
 app.use(bodyParser.json());       // to support JSON-encoded bodies
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
   extended: false
@@ -46,7 +58,7 @@ app.use("/", (req, res, next) => {
           next();
         } else {
           return res.status(401).json({
-            errorMessage: 'User unauthorized!',
+            errorMessage: 'Not a user yet!',
             status: false
           });
         }
@@ -67,7 +79,7 @@ app.get("/", (req, res) => {
   });
 });
 
-/* login api */
+/* API for the login page - checks & verifies whether someone is already registered */
 app.post("/login", (req, res) => {
   try {
     if (req.body && req.body.username && req.body.password) {
@@ -79,21 +91,21 @@ app.post("/login", (req, res) => {
           } else {
 
             res.status(400).json({
-              errorMessage: 'Username or password is incorrect!',
+              errorMessage: 'Incorrect username or password!',
               status: false
             });
           }
 
         } else {
           res.status(400).json({
-            errorMessage: 'Username or password is incorrect!',
+            errorMessage: 'Incorrect username or password!',
             status: false
           });
         }
       })
     } else {
       res.status(400).json({
-        errorMessage: 'Add proper parameter first!',
+        errorMessage: 'Fill in all fields!',
         status: false
       });
     }
@@ -128,14 +140,14 @@ app.post("/register", (req, res) => {
             } else {
               res.status(200).json({
                 status: true,
-                title: 'Registered Successfully.'
+                title: 'User Registered Successfully.'
               });
             }
           });
 
         } else {
           res.status(400).json({
-            errorMessage: `UserName ${req.body.username} Already Exist!`,
+            errorMessage: `This UserName ${req.body.username} Already Exist!`,
             status: false
           });
         }
@@ -144,7 +156,7 @@ app.post("/register", (req, res) => {
 
     } else {
       res.status(400).json({
-        errorMessage: 'Add proper parameter first!',
+        errorMessage: 'Fill in all fields!',
         status: false
       });
     }
@@ -156,6 +168,7 @@ app.post("/register", (req, res) => {
   }
 });
 
+//verifying user
 function checkUserAndGenerateToken(data, req, res) {
   jwt.sign({ user: data.username, id: data._id }, 'shhhhh11111', { expiresIn: '1d' }, (err, token) => {
     if (err) {
@@ -173,18 +186,18 @@ function checkUserAndGenerateToken(data, req, res) {
   });
 }
 
-/* Api to add drug */
-app.post("/add-drug", (req, res) => {
+/* API for adding a new medicine */
+app.post("/add-drug", upload.any(), (req, res) => {
   try {
-    if (req.body && req.body.drug_name && req.body.dosage && req.body.frequency && req.body.adherence) {
+    if (req.files && req.body && req.body.name && req.body.drug_name && req.body.dosage &&
+      req.body.frequency) {
 
       let new_drug = new drug();
-      new_drug.patient_name = req.body.patient_name;
+      new_drug.name = req.body.name;
       new_drug.drug_name = req.body.drug_name;
       new_drug.dosage = req.body.dosage;
+      new_drug.image = req.files[0].filename;
       new_drug.frequency = req.body.frequency;
-      new_drug.adherence = req.body.adherence;
-      new_drug.reason = req.body.reason;
       new_drug.user_id = req.user.id;
       new_drug.save((err, data) => {
         if (err) {
@@ -195,14 +208,14 @@ app.post("/add-drug", (req, res) => {
         } else {
           res.status(200).json({
             status: true,
-            title: 'Drug Added successfully.'
+            title: 'Medicine added!'
           });
         }
       });
 
     } else {
       res.status(400).json({
-        errorMessage: 'Add proper parameter first!',
+        errorMessage: 'Fill in all details!',
         status: false
       });
     }
@@ -214,16 +227,25 @@ app.post("/add-drug", (req, res) => {
   }
 });
 
-/* Api to edit drug */
-app.post("/update-drug", (req, res) => {
+/* API to edit a medicine added by the user */
+app.post("/update-drug", upload.any(), (req, res) => {
   try {
-    if (req.body && req.body.patient_name && req.body.drug_name && req.body.dosage &&
-      req.body.frequency) {
+    if (req.files && req.body && req.body.name && req.body.drug_name && req.body.dosage &&
+      req.body.id && req.body.frequency) {
 
       drug.findById(req.body.id, (err, new_drug) => {
 
-        if (req.body.patient_name) {
-          new_drug.patient_name = req.body.patient_name;
+        // if file already exist than remove it
+        if (req.files && req.files[0] && req.files[0].filename && new_drug.image) {
+          var path = `./uploads/${new_drug.image}`;
+          fs.unlinkSync(path);
+        }
+
+        if (req.files && req.files[0] && req.files[0].filename) {
+          new_drug.image = req.files[0].filename;
+        }
+        if (req.body.name) {
+          new_drug.name = req.body.name;
         }
         if (req.body.drug_name) {
           new_drug.drug_name = req.body.drug_name;
@@ -233,12 +255,6 @@ app.post("/update-drug", (req, res) => {
         }
         if (req.body.frequency) {
           new_drug.frequency = req.body.frequency;
-        }
-        if (req.body.adherence) {
-          new_drug.adherence = req.body.adherence;
-        }
-        if (req.body.reason) {
-          new_drug.reason = req.body.reason;
         }
 
         new_drug.save((err, data) => {
@@ -250,7 +266,7 @@ app.post("/update-drug", (req, res) => {
           } else {
             res.status(200).json({
               status: true,
-              title: 'Drug successfully updated!'
+              title: 'Drug edited!'
             });
           }
         });
@@ -259,7 +275,7 @@ app.post("/update-drug", (req, res) => {
 
     } else {
       res.status(400).json({
-        errorMessage: 'Add proper parameter first!',
+        errorMessage: 'Fill in all details!',
         status: false
       });
     }
@@ -271,7 +287,7 @@ app.post("/update-drug", (req, res) => {
   }
 });
 
-/* Api to delete a drug */
+/* API for deleting a medicine */
 app.post("/delete-drug", (req, res) => {
   try {
     if (req.body && req.body.id) {
@@ -279,7 +295,7 @@ app.post("/delete-drug", (req, res) => {
         if (data.is_delete) {
           res.status(200).json({
             status: true,
-            title: 'Product successfully deleted!'
+            title: 'Medicine deleted!'
           });
         } else {
           res.status(400).json({
@@ -290,7 +306,7 @@ app.post("/delete-drug", (req, res) => {
       });
     } else {
       res.status(400).json({
-        errorMessage: 'Add proper parameter first!',
+        errorMessage: 'Fill in all details!',
         status: false
       });
     }
@@ -302,8 +318,61 @@ app.post("/delete-drug", (req, res) => {
   }
 });
 
-//run the appointment notification scheduler
-//scheduler.start();
+/*API to search a medicine by its name*/
+app.get("/get-drug", (req, res) => {
+  try {
+    var query = {};
+    query["$and"] = [];
+    query["$and"].push({
+      is_delete: false,
+      user_id: req.user.id
+    });
+    if (req.query && req.query.search) {
+      query["$and"].push({
+        name: { $regex: req.query.search }
+      });
+    }
+    var perPage = 5;
+    var page = req.query.page || 1;
+    drug.find(query, { date: 1, name: 1, id: 1, drug_name: 1, dosage: 1, frequency: 1, image: 1 })
+      .skip((perPage * page) - perPage).limit(perPage)
+      .then((data) => {
+        drug.find(query).count()
+          .then((count) => {
 
+            if (data && data.length > 0) {
+              res.status(200).json({
+                status: true,
+                title: 'Medicine found!',
+                drugs: data,
+                current_page: page,
+                total: count,
+                pages: Math.ceil(count / perPage),
+              });
+            } else {
+              res.status(400).json({
+                errorMessage: 'No medicine found!',
+                status: false
+              });
+            }
 
+          });
 
+      }).catch(err => {
+        res.status(400).json({
+          errorMessage: err.message || err,
+          status: false
+        });
+      });
+  } catch (e) {
+    res.status(400).json({
+      errorMessage: 'Something went wrong!',
+      status: false
+    });
+  }
+
+});
+
+app.listen(2000, () => {
+  console.log("Server is Runing On port 2000");
+});

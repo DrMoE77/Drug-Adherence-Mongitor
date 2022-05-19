@@ -1,3 +1,4 @@
+// importing all the necessary packages: React, axios
 import React, { Component } from 'react';
 import {
   Button, TextField, Dialog, DialogActions, LinearProgress,
@@ -8,20 +9,21 @@ import { Pagination } from '@material-ui/lab';
 import swal from 'sweetalert';
 const axios = require('axios');
 
+// dashboard class which shows a list of medicines uploaded by the patients
 export default class Dashboard extends Component {
   constructor() {
     super();
     this.state = {
       token: '',
-      openDrugModal: false,
+      openDrugtModal: false,
       openDrugEditModal: false,
       id: '',
-      patient_name: '',
+      name: '',
       drug_name: '',
       dosage: '',
       frequency: '',
-      adherence: '',
-      reason: '',
+      file: '',
+      fileName: '',
       page: 1,
       search: '',
       drugs: [],
@@ -30,6 +32,7 @@ export default class Dashboard extends Component {
     };
   }
 
+  //getting the token from local storage
   componentDidMount = () => {
     let token = localStorage.getItem('token');
     if (!token) {
@@ -41,6 +44,7 @@ export default class Dashboard extends Component {
     }
   }
 
+  //getting medicines from the database when the user searches for them
   getDrug = () => {
     
     this.setState({ loading: true });
@@ -57,11 +61,17 @@ export default class Dashboard extends Component {
     }).then((res) => {
       this.setState({ loading: false, drugs: res.data.drugs, pages: res.data.pages });
     }).catch((err) => {
+      swal({
+        text: err.response.data.errorMessage,
+        icon: "error",
+        type: "error"
+      });
       this.setState({ loading: false, drugs: [], pages: 0 },()=>{});
     });
   }
 
-  deletedrug = (id) => {
+  //deleting a medicine added by the patient(user)
+  deleteDrug = (id) => {
     axios.post('http://localhost:2000/delete-drug', {
       id: id
     }, {
@@ -89,21 +99,27 @@ export default class Dashboard extends Component {
     });
   }
 
+  //to change the page incase there are multiple pages of medicines
   pageChange = (e, page) => {
     this.setState({ page: page }, () => {
       this.getDrug();
     });
   }
 
+  //logging out of the dashboard to go back to the login page
   logOut = () => {
     localStorage.setItem('token', null);
+    //routing back to the login page
     this.props.history.push('/');
   }
 
+  //searching by patient's name
   onChange = (e) => {
-    
+    if (e.target.files && e.target.files[0] && e.target.files[0].name) {
+      this.setState({ fileName: e.target.files[0].name }, () => { });
+    }
     this.setState({ [e.target.name]: e.target.value }, () => { });
-    if (e.target.name === 'search') {
+    if (e.target.name == 'search') {
       this.setState({ page: 1 }, () => {
         this.getDrug();
       });
@@ -111,17 +127,15 @@ export default class Dashboard extends Component {
   };
 
   addDrug = () => {
-    
-    const field = new FormData();
-    
-    field.append('patient_name', this.state.patient_name);
-    field.append('drug_name', this.state.drug_name);
-    field.append('dosage', this.state.dosage);
-    field.append('frequency', this.state.frequency);
-    field.append('adherence', this.state.adherence);
-    field.append('reason', this.state.reason);
+    const fileInput = document.querySelector("#fileInput");
+    const file = new FormData();
+    file.append('file', fileInput.files[0]);
+    file.append('name', this.state.name);
+    file.append('drug_name', this.state.drug_name);
+    file.append('frequency', this.state.frequency);
+    file.append('dosage', this.state.dosage);
 
-    axios.post('http://localhost:2000/add-drug', field, {
+    axios.post('http://localhost:2000/add-drug', file, {
       headers: {
         'content-type': 'multipart/form-data',
         'token': this.state.token
@@ -135,7 +149,7 @@ export default class Dashboard extends Component {
       });
 
       this.handleDrugClose();
-      this.setState({ patient_name: '', drug_name: '', dosage: '', frequency: '', adherence:'', reason: '',page: 1 }, () => {
+      this.setState({ name: '', drug_name: '', frequency: '', dosage: '', file: null, page: 1 }, () => {
         this.getDrug();
       });
     }).catch((err) => {
@@ -150,16 +164,16 @@ export default class Dashboard extends Component {
   }
 
   updateDrug = () => {
-
+    const fileInput = document.querySelector("#fileInput");
     const file = new FormData();
     file.append('id', this.state.id);
-    file.append('patient_name', this.state.patient_name);
+    file.append('file', fileInput.files[0]);
+    file.append('name', this.state.name);
     file.append('drug_name', this.state.drug_name);
-    file.append('dosage', this.state.dosage);
     file.append('frequency', this.state.frequency);
-    file.append('adherence', this.state.adherence);
-    file.append('reason', this.state.reason);
+    file.append('dosage', this.state.dosage);
 
+    //updating or editing the medicine uploaded by the user
     axios.post('http://localhost:2000/update-drug', file, {
       headers: {
         'content-type': 'multipart/form-data',
@@ -174,7 +188,7 @@ export default class Dashboard extends Component {
       });
 
       this.handleDrugEditClose();
-      this.setState({ patient_name: '', drug_name: '', dosage: '', frequency: '', adherence:'', reason: '',file: null, page: 1 }, () => {
+      this.setState({ name: '', drug_name: '', frequency: '', dosage: '', file: null }, () => {
         this.getDrug();
       });
     }).catch((err) => {
@@ -188,16 +202,16 @@ export default class Dashboard extends Component {
 
   }
 
+  //dialog box for details about the medicine 
   handleDrugOpen = () => {
     this.setState({
       openDrugModal: true,
       id: '',
-      patient_name: '',
+      name: '',
       drug_name: '',
       dosage: '',
       frequency: '',
-      adherence: '',
-      reason: ''
+      fileName: ''
     });
   };
 
@@ -208,12 +222,12 @@ export default class Dashboard extends Component {
   handleDrugEditOpen = (data) => {
     this.setState({
       openDrugEditModal: true,
-      patient_name: data.patient_name,
+      id: data._id,
+      name: data.name,
       drug_name: data.drug_name,
       dosage: data.dosage,
       frequency: data.frequency,
-      adherence: data.adherence,
-      reason: data.reason
+      fileName: data.image
     });
   };
 
@@ -221,21 +235,27 @@ export default class Dashboard extends Component {
     this.setState({ openDrugEditModal: false });
   };
 
+  //rendering the html for the patient's dashboard which includes a table with medicines 
   render() {
     return (
-      <div className='mainDiv'>
+      <div className="mainDiv">
         {this.state.loading && <LinearProgress size={40} />}
         <div>
           <h2>Patient's Dashboard</h2>
+          
+          {/* adding a new medicine to the table */}
+          
           <Button
             className="button_style"
             variant="contained"
             color="primary"
             size="small"
             onClick={this.handleDrugOpen}
-          >
-            Add Drug
+          >  
+            Add a Medicine
           </Button>
+          
+          {/* logout button*/}
           <Button
             className="button_style"
             variant="contained"
@@ -246,75 +266,21 @@ export default class Dashboard extends Component {
           </Button>
         </div>
 
-        {/* Edit Drug */}
+        {/* Edit a medicine from the table */}
         <Dialog
           open={this.state.openDrugEditModal}
           onClose={this.handleDrugClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">Edit Drug</DialogTitle>
+          <DialogTitle id="alert-dialog-title">Edit Medicine</DialogTitle>
           <DialogContent>
             <TextField
               id="standard-basic"
               type="text"
               autoComplete="off"
-              name="drug_name"
-              value={this.state.drug_name}
-              onChange={this.onChange}
-              placeholder="Drug Name"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="dosage"
-              value={this.state.dosage}
-              onChange={this.onChange}
-              placeholder="Dosage"
-              required
-            /><br />
-            <TextField
-              id="standard-basic"
-              type="number"
-              autoComplete="off"
-              name="frequency"
-              value={this.state.frequency}
-              onChange={this.onChange}
-              placeholder="Frequency"
-              required
-            /><br />
-            
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleDrugEditClose} color="primary">
-              Cancel
-            </Button>
-            
-            <Button
-              disabled={this.state.patient_name === '' || this.state.drug_name === '' || this.state.dosage === '' || this.state.frequency === '' || this.state.adherence === '' || this.state.reason === ''}
-              onClick={(e) => this.updateDrug()} color="primary" autoFocus>
-              Edit Drug
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        {/* Add Drug */}
-        <Dialog
-          open={this.state.openDrugModal}
-          onClose={this.handleDrugClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">Add Drug</DialogTitle>
-          <DialogContent>
-          <TextField
-              id="standard-basic"
-              type="text"
-              autoComplete="off"
-              name="patient_name"
-              value={this.state.patient_name}
+              name="name"
+              value={this.state.name}
               onChange={this.onChange}
               placeholder="Patient Name"
               required
@@ -326,7 +292,7 @@ export default class Dashboard extends Component {
               name="drug_name"
               value={this.state.drug_name}
               onChange={this.onChange}
-              placeholder="Drug Name"
+              placeholder="Medicine Name"
               required
             /><br />
             <TextField
@@ -348,28 +314,108 @@ export default class Dashboard extends Component {
               onChange={this.onChange}
               placeholder="Frequency"
               required
-            /><br />
+            /><br /><br />
+            <Button
+              variant="contained"
+              component="label"
+            > Upload Prescription
+            <input
+                id="standard-basic"
+                type="file"
+                accept="image/*"
+                name="file"
+                value={this.state.file}
+                onChange={this.onChange}
+                id="fileInput"
+                placeholder="File"
+                hidden
+              />
+            </Button>&nbsp;
+            {this.state.fileName}
+          </DialogContent>
+
+          <DialogActions>
+            <Button onClick={this.handleDrugEditClose} color="primary">
+              Cancel
+            </Button>
+            <Button
+              disabled={this.state.name == '' || this.state.drug_name == '' || this.state.frequency == '' || this.state.dosage == ''}
+              onClick={(e) => this.updateDrug()} color="primary" autoFocus>
+              Edit Medicine
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        {/* Adding a new medicine */}
+        <Dialog
+          open={this.state.openDrugModal}
+          onClose={this.handleDrugClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">Add Medicine</DialogTitle>
+          <DialogContent>
             <TextField
               id="standard-basic"
-              type="number"
+              type="text"
               autoComplete="off"
-              name="adherence"
-              value={this.state.adherence}
+              name="name"
+              value={this.state.name}
               onChange={this.onChange}
-              placeholder="Adherence"
+              placeholder="Patient Name"
               required
             /><br />
             <TextField
               id="standard-basic"
               type="text"
               autoComplete="off"
-              name="reason"
-              value={this.state.reason}
+              name="drug_name"
+              value={this.state.drug_name}
               onChange={this.onChange}
-              placeholder="Reason"
+              placeholder="Medicine Name"
               required
             /><br />
-            
+            <TextField
+              id="standard-basic"
+              type="number"
+              autoComplete="off"
+              name="dosage"
+              value={this.state.dosage}
+              onChange={this.onChange}
+              placeholder="Dosage"
+              required
+            /><br />
+            <TextField
+              id="standard-basic"
+              type="number"
+              autoComplete="off"
+              name="frequency"
+              value={this.state.frequency}
+              onChange={this.onChange}
+              placeholder="Frequency"
+              required
+            /><br /><br />
+            <Button
+              variant="contained"
+              component="label"
+            > Upload Prescription
+            <input
+                id="standard-basic"
+                type="file"
+                accept="image/*"
+                // inputProps={{
+                //   accept: "image/*"
+                // }}
+                name="file"
+                value={this.state.file}
+                onChange={this.onChange}
+                id="fileInput"
+                placeholder="File"
+                hidden
+                required
+              />
+            </Button>&nbsp;
+            {this.state.fileName}
           </DialogContent>
 
           <DialogActions>
@@ -377,9 +423,9 @@ export default class Dashboard extends Component {
               Cancel
             </Button>
             <Button
-              disabled={this.state.drug_name === '' || this.state.dosage === '' || this.state.frequency === ''}
+              disabled={this.state.name == '' || this.state.drug_name == '' || this.state.frequency == '' || this.state.dosage == '' || this.state.file == null}
               onClick={(e) => this.addDrug()} color="primary" autoFocus>
-              Add Drug
+              Add Medicine
             </Button>
           </DialogActions>
         </Dialog>
@@ -394,20 +440,18 @@ export default class Dashboard extends Component {
             name="search"
             value={this.state.search}
             onChange={this.onChange}
-            placeholder="Search by drug name"
+            placeholder="Search by medicine name"
             required
           />
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
-                
+                <TableCell align="center">Patient Name</TableCell>
+                <TableCell align="center">Image</TableCell>
                 <TableCell align="center">Drug Name</TableCell>
                 <TableCell align="center">Dosage</TableCell>
                 <TableCell align="center">Frequency</TableCell>
-                <TableCell align="center">Adherence</TableCell>
-                <TableCell align="center">Reason</TableCell>
                 <TableCell align="center">Action</TableCell>
-               
               </TableRow>
             </TableHead>
             <TableBody>
@@ -416,10 +460,10 @@ export default class Dashboard extends Component {
                   <TableCell align="center" component="th" scope="row">
                     {row.name}
                   </TableCell>
-                  
+                  <TableCell align="center"><img src={`http://localhost:2000/${row.image}`} width="70" height="70" /></TableCell>
+                  <TableCell align="center">{row.drug_name}</TableCell>
                   <TableCell align="center">{row.dosage}</TableCell>
                   <TableCell align="center">{row.frequency}</TableCell>
-                  <TableCell align="center">{row.adherence}</TableCell>
                   <TableCell align="center">
                     <Button
                       className="button_style"
@@ -440,12 +484,13 @@ export default class Dashboard extends Component {
                       Delete
                   </Button>
                   </TableCell>
+                  {/*adherence to be calculated based on sms confirmation received from the patient*/}
+                  <TableCell align="center">Adherence</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
           <br />
-          
           <Pagination count={this.state.pages} page={this.state.page} onChange={this.pageChange} color="primary" />
         </TableContainer>
 
