@@ -1,7 +1,15 @@
 body {
+  margin: 0;
   text-align: center;
   font-family: 'Roboto', sans-serif;
-  background: url(/image.jpg);
+  background: url(./media/image.jpg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
 }
 
 .button_style {
@@ -21,4 +29,5 @@ h2 {
   background-color: white;
   padding: 50px;
 }
+
 

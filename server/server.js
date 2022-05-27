@@ -12,8 +12,8 @@ mongoose.connect("mongodb://localhost/medicinesDB");
 var fs = require('fs');
 
 //importing models
-var drug = require("./model/drug.js");
-var user = require("./model/user.js");
+var drug = require("./models/drug.js");
+var user = require("./models/user.js");
 
 var dir = './uploads';
 
