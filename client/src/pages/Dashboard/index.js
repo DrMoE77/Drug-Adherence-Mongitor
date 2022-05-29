@@ -320,7 +320,7 @@ export default class Dashboard extends Component {
               component="label"
             > Upload Prescription
             <input
-                id="standard-basic"
+                
                 type="file"
                 accept="image/*"
                 name="file"
@@ -400,7 +400,7 @@ export default class Dashboard extends Component {
               component="label"
             > Upload Prescription
             <input
-                id="standard-basic"
+               
                 type="file"
                 accept="image/*"
                 // inputProps={{

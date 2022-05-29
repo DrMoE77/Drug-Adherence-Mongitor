@@ -1,36 +1,81 @@
-const { Drug } = require('../models');
+const { User, Drug } = require('../models');
+const { AuthenticationError } = require('apollo-server-express');
+const { signToken } = require('../utils/authentication');
 
 const resolvers = {
-  Query: {
-    drugs: async () => {
-      return Drug.find().sort({ createdAt: -1 });
-    },
+    Query: {
+      me: async (parent, args, context) => {
+        if(context.user) {
+          const userData = await User.findOne({_id: context.user._id})
+          .select('-__v -password')
+          .populate('users')
 
-    drug: async (parent, { drugId }) => {
-      return Drug.findOne({ _id: drugId });
-    },
-  },
-
-  Mutation: {
-    addDrug: async (parent, { name, drug_name, dosage, frequency }) => {
-      return Drug.create({ name, drug_name, dosage, frequency });
-    },
-
-    addDrug: async (parent, { drugId, name, drug_name, dosage, frequency }) => {
-      return Drug.findOneAndUpdate(
-        { _id: drugId },
-        {
-          new: true,
-          runValidators: true,
+          return userData
         }
-      );
-    },
-    
-    removeDrug: async (parent, { drugId }) => {
-      return Drug.findOneAndDelete({ _id: drugId });
-    },
-  
-  },
+        throw new AuthenticationError('Not logged in')
+      },
+      // get all drugs
+      drugs: async (parent, {username }) => {
+        const params = username ? { username } : {}; 
+        return Drug.find(params).sort({ createdAt: -1 })
+      },
+      // get a drug by ID when searched by the user
+      drug: async (parent, {_id }) => {
+        return Drug.findOne({ _id }); 
+      },
+      // get all users 
+      users: async () => {
+        return User.find()
+        .select('__v -password')
+        .populate('users')
+      },
+      // get user by username
+      user: async (parent, {username }) => {
+        return User.findOne ({ username })
+        .select('-__v -password')
+        .populate('users');
+      }
+      },
+      Mutation: {
+          // model creates a new user in the database with whatever is passed in with args 
+          // args is username, password, email 
+          addUser: async (parents, args) => {
+            const user = await User.create(args);
+            const token  = signToken(user); 
+            return { token, user }
+          },
+          login: async (parent, {email, password}) => {
+              const user = await User.findOne({ email });
+
+              if(!user) {
+                  throw new AuthenticationError('Incorrect username or password')
+              }
+              const correctPw = await user.isCorrectPassword(password); 
+
+              if(!correctPw) {
+                  throw new AuthenticationError('Incorrect credentials'); 
+              }
+              const token = signToken(user)
+              return { token, user }; 
+          },
+            addDrug: async (parent, args, context) => {
+            if (context.user) {
+            const drug = await Drug.create({ ...args, username: context.user.username });
+        
+            await User.findByIdAndUpdate(
+                { _id: context.user._id },
+                { $push: { drugs: drug._id } },
+                { new: true }
+            );
+        
+            return drug;
+            }
+        
+            throw new AuthenticationError('You need to be logged in!');
+        },
+       
+        }
 };
 
+  
 module.exports = resolvers;

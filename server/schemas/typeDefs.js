@@ -1,26 +1,45 @@
+// import the gql tagged template function
 const { gql } = require('apollo-server-express');
 
+// create our typeDefs
+// thought is a custom data type
 const typeDefs = gql`
+
   type User {
-    username: String,
-    password: String
+    _id: ID
+    username: String
+    drugs: [Drug]
   }
 
   type Drug {
     _id: ID
-    name: String,
-    drug_name: String,
-    dosage: Number,
-    image: String,
-    frequency: Number
+    name: String
+    createdAt: String
+    drug_name: String
+    dosage: Int
+    frequency: Int
+  }
+
+  type Query {
+    me: User
+    users: [User]
+    user(username: String!): User
+    drugs(username: String): [Drug]
+    drug(_id: ID!): Drug
   }
 
   type Mutation {
-    addDrug(name: String!, drug_name: String!, dosage: Number!, frequency: Number!): Drug
-    
-    removeDrug(drugId: ID!): Drug
-    
+    login(email: String!, password: String!): Authentication
+    addUser(username: String!, email: String!, password: String!): Authentication
+    addDrug(name: String!, drug_name: String!, dosage:Int!, frequency:Int!): Drug
   }
+
+  type Authentication {
+    token: ID!
+    user: User
+  }
+
 `;
 
+// export the typeDefs
 module.exports = typeDefs;
