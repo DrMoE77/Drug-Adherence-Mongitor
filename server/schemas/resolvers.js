@@ -1,42 +1,35 @@
-const { Thought } = require('../models');
+const { Drug } = require('../models');
 
 const resolvers = {
   Query: {
-    thoughts: async () => {
-      return Thought.find().sort({ createdAt: -1 });
+    drugs: async () => {
+      return Drug.find().sort({ createdAt: -1 });
     },
 
-    thought: async (parent, { thoughtId }) => {
-      return Thought.findOne({ _id: thoughtId });
+    drug: async (parent, { drugId }) => {
+      return Drug.findOne({ _id: drugId });
     },
   },
 
   Mutation: {
-    addThought: async (parent, { thoughtText, thoughtAuthor }) => {
-      return Thought.create({ thoughtText, thoughtAuthor });
+    addDrug: async (parent, { name, drug_name, dosage, frequency }) => {
+      return Drug.create({ name, drug_name, dosage, frequency });
     },
-    addComment: async (parent, { thoughtId, commentText }) => {
-      return Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        {
-          $addToSet: { comments: { commentText } },
-        },
+
+    addDrug: async (parent, { drugId, name, drug_name, dosage, frequency }) => {
+      return Drug.findOneAndUpdate(
+        { _id: drugId },
         {
           new: true,
           runValidators: true,
         }
       );
     },
-    removeThought: async (parent, { thoughtId }) => {
-      return Thought.findOneAndDelete({ _id: thoughtId });
+    
+    removeDrug: async (parent, { drugId }) => {
+      return Drug.findOneAndDelete({ _id: drugId });
     },
-    removeComment: async (parent, { thoughtId, commentId }) => {
-      return Thought.findOneAndUpdate(
-        { _id: thoughtId },
-        { $pull: { comments: { _id: commentId } } },
-        { new: true }
-      );
-    },
+  
   },
 };
 

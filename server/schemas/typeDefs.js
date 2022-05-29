@@ -11,20 +11,15 @@ const typeDefs = gql`
     name: String,
     drug_name: String,
     dosage: Number,
-	image: String,
-	frequency: Number
-  }
-
-  type Query {
-    thoughts: [Thought]!
-    thought(thoughtId: ID!): Thought
+    image: String,
+    frequency: Number
   }
 
   type Mutation {
-    addThought(thoughtText: String!, thoughtAuthor: String!): Thought
-    addComment(thoughtId: ID!, commentText: String!): Thought
-    removeThought(thoughtId: ID!): Thought
-    removeComment(thoughtId: ID!, commentId: ID!): Thought
+    addDrug(name: String!, drug_name: String!, dosage: Number!, frequency: Number!): Drug
+    
+    removeDrug(drugId: ID!): Drug
+    
   }
 `;
 
