@@ -5,6 +5,6 @@ userSchema = new Schema( {
 	username: String,
 	password: String
 }),
-user = mongoose.model('user', userSchema);
+User = mongoose.model('User', userSchema);
 
-module.exports = user;
+module.exports = User;

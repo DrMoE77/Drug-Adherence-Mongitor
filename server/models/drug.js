@@ -4,13 +4,13 @@ var Schema = mongoose.Schema;
 drugSchema = new Schema( {
 	name: String,
 	drug_name: String,
-	dosage: Number,
+	dosage: Float,
 	image: String,
-	frequency: Number,
+	frequency: Float,
 	user_id: Schema.ObjectId,
 	is_delete: { type: Boolean, default: false },
 	date : { type : Date, default: Date.now }
 }),
-drug = mongoose.model('drug', drugSchema);
+Drug = mongoose.model('Drug', drugSchema);
 
-module.exports = drug;
+module.exports = Drug;
