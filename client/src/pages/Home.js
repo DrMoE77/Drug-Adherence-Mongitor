@@ -14,7 +14,7 @@ const Home = () => {
     <main>
     <div className="flex-row justify-space-between">
     <h4 style={{marginTop:50}}>
-      Welcome to the Medical Adherence Monitor, where you can create a digital list of your medicines and monitor it regularly.
+      Welcome to the Drug Adherence Monitor, where you can create a digital list of your medicines and monitor it regularly.
       
     </h4>
 
