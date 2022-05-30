@@ -1,32 +1,33 @@
-# Drug Adherence Monitor
-  [![License used: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# Deep-Thoughts React Application
+![Github licence](http://img.shields.io/badge/license-MIT-blue.svg)
 
-  ## Description
-  The Medication Adherence Monitor App serves a number of purposes. It aides patient compliance to their medication by acting as a reminder via an SMS reminder functionality using twilio
+## Description 
+This project is a full stack web application using the MERN Stack along with GraphQL and Apollo. This is a blogging platform that will allow users to sign up and login, view profile pages, add friends, add reactions, and add thoughts. This application uses JWT for authentication and is deployed on Heroku.
 
-  ## Table of Contents
-  * [Usage](#usage)
-  * [Installation](#installation)
-  * [License](#license)
-  * [Contributing to this project](#contributions)
-  * [Tests](#tests)
-  * [Contact](#contact)
-  
-  ## Usage
-  It relays the adherence history of the patient back to their doctor. 
+## Table of Contents
+* [Installation](#installation)
+* [Usage](#usage)
+* [License](#license)
+* [Contributing](#contributing)
+* [Tests](#tests)
+* [Questions](#questions)
 
-  ## Installation 
-  cd backend npm install and then cd frontend npm install and node server.js and then fronend npm start
+## Installation 
+The user should clone the repository from GitHub and install dependencies. For development or testing purposes, run `npm install` on both client and server directories to install dependencies. There are two servers for client side and server side, which can be run on their own. To run both servers at the same time, open the root directory and run `npm start`.
 
-  ## License
-  [![License used: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## Usage 
+This application will allow users view an about me page, send information through a contact form, view my projects, and view my resume.<br>
+Please view deployed application on [Heroku](https://nw-deep-thoughts.herokuapp.com/)<br>
+<img src='client/public/images/deep-thoughts-screen.png'>
 
-  ## Contributing to this project
-  no contribution required
+## License 
+This project is license under MIT
 
-  ## Tests
-  there are no testing instructions
+## Contributing 
+Contributors should read the installation section. 
 
-  ## Contact
-  My GitHub: (https://github.com/https://github.com/DrMoE77) <br>
-  Email me at: drmo.afifi@gmail.com
+## Tests
+There are no tests for this application. 
+
+## Questions
+If you have any questions about this projects, please contact me directly at nicole.elisaw@gmail.com. You can view more of my projects at https://github.com/nicolewallace09.

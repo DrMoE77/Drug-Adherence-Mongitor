@@ -8,19 +8,27 @@ const typeDefs = gql`
   type User {
     _id: ID
     username: String
+    email: String
     drugs: [Drug]
   }
 
   type Drug {
     _id: ID
-    name: String
-    createdAt: String
     drug_name: String
+    createdAt: String
+    username: String
     dosage: Int
-    frequency: Int
+    freq: Int
+    reactions: [reactionText]
   }
 
-  type Query {
+  type reactionText {
+    _id: ID
+    reactionText: String
+    createdAt: String
+  }
+
+  type  {
     me: User
     users: [User]
     user(username: String!): User
@@ -29,12 +37,13 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    login(email: String!, password: String!): Authentication
-    addUser(username: String!, email: String!, password: String!): Authentication
-    addDrug(name: String!, drug_name: String!, dosage:Int!, frequency:Int!): Drug
+    login(email: String!, password: String!): Auth
+    addUser(username: String!, email: String!, password: String!): Auth
+    addDrug(drug_name: String!, dosage: String!, freq: String!): Drug
+    addReaction(drugId: ID!, reactionText: String!): Drug
   }
 
-  type Authentication {
+  type Auth {
     token: ID!
     user: User
   }

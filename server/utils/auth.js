@@ -1,20 +1,19 @@
+// importing jwt for authentication
 const jwt = require('jsonwebtoken');
-
-const secret = 'shhhhh11111';
+const secret = 'mysecretsshhhhh';
 const expiration = '2h';
 
+// authentication based on username, name and email
 module.exports = {
-  signToken: function({ username, _id }) {
-    const payload = { username,  _id };
-
+  signToken: function({ username, email, _id }) {
+    const payload = { username, email, _id };
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },
 
   authMiddleware: function({ req }) {
-    // allows token to be sent via req.body, req.query, or headers
     let token = req.body.token || req.query.token || req.headers.authorization;
   
-    // separate "Bearer" from "<tokenvalue>"
+   
     if (req.headers.authorization) {
       token = token
         .split(' ')
@@ -22,20 +21,18 @@ module.exports = {
         .trim();
     }
   
-    // if no token, return request object as is
+
     if (!token) {
       return req;
     }
   
     try {
-      // decode and attach user data to request object
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       req.user = data;
     } catch {
-      console.log('Username or password invalid');
+      console.log('Invalid entry');
     }
-  
-    // return updated request object
+
     return req;
   }
 };

@@ -1,6 +1,6 @@
 const { User, Drug } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
-const { signToken } = require('../utils/authentication');
+const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
@@ -8,7 +8,8 @@ const resolvers = {
         if(context.user) {
           const userData = await User.findOne({_id: context.user._id})
           .select('-__v -password')
-          .populate('users')
+          .populate('drugs')
+          .populate('reactions');
 
           return userData
         }
@@ -19,7 +20,7 @@ const resolvers = {
         const params = username ? { username } : {}; 
         return Drug.find(params).sort({ createdAt: -1 })
       },
-      // get a drug by ID when searched by the user
+      // get drug by ID
       drug: async (parent, {_id }) => {
         return Drug.findOne({ _id }); 
       },
@@ -27,13 +28,15 @@ const resolvers = {
       users: async () => {
         return User.find()
         .select('__v -password')
-        .populate('users')
+        .populate('drugs')
+        .populate('reactions');
       },
       // get user by username
       user: async (parent, {username }) => {
         return User.findOne ({ username })
         .select('-__v -password')
-        .populate('users');
+        .populate('drugs')
+        .populate('reactions');
       }
       },
       Mutation: {
@@ -48,7 +51,7 @@ const resolvers = {
               const user = await User.findOne({ email });
 
               if(!user) {
-                  throw new AuthenticationError('Incorrect username or password')
+                  throw new AuthenticationError('Incorrect credentials')
               }
               const correctPw = await user.isCorrectPassword(password); 
 
@@ -58,14 +61,14 @@ const resolvers = {
               const token = signToken(user)
               return { token, user }; 
           },
-            addDrug: async (parent, args, context) => {
+            addDrug: async (parent, { drug_name, dosage, freq }, context) => {
             if (context.user) {
-            const drug = await Drug.create({ ...args, username: context.user.username });
+            const drug = await Drug.create({ drug_name, dosage, freq, username: context.user.username });
         
             await User.findByIdAndUpdate(
                 { _id: context.user._id },
-                { $push: { drugs: drug._id } },
-                { new: true }
+                { $push: { drugs: { drug_name, dosage, freq, drugs: drug._id  } } },
+                { new: true, runValidators: true }
             );
         
             return drug;
@@ -73,7 +76,20 @@ const resolvers = {
         
             throw new AuthenticationError('You need to be logged in!');
         },
-       
+        addReaction: async (parent, { drugId, reactionText }, context) => {
+            if (context.user) {
+              const updatedDrug = await Drug.findOneAndUpdate(
+                { _id: drugId },
+                { $push: { reactions: { reactionText, username: context.user.username } } },
+                { new: true, runValidators: true }
+              );
+          
+              return updatedDrug;
+            }
+          
+            throw new AuthenticationError('You need to be logged in!');
+          },
+         
         }
 };
 

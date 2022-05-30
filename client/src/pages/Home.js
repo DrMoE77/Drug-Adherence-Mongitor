@@ -1,7 +1,9 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_THOUGHTS, QUERY_ME_BASIC  } from '../utils/queries';
-import Authentication from '../utils/authentication';
+import { QUERY_DRUGS, QUERY_ME_BASIC  } from '../utils/queries';
+import DrugList from '../components/DrugList';
+import Auth from '../utils/auth';
+import DrugForm from '../components/DrugForm';
 
 const Home = () => {
   // use useQuery hook to make query request
@@ -14,18 +16,24 @@ const Home = () => {
   console.log(drugs);
 
   // logged in users -- if logged in the variable will be true 
-  const loggedIn = Authentication.loggedIn();
+  const loggedIn = Auth.loggedIn();
 
   return (
     <main>
     <div className="flex-row justify-space-between">
-    <h2>
-        Welcome to the Drug Adherence Monitor!
-    </h2>
-    <p>
-        Lorem Ipsum!
-    </p>
-    
+    {loggedIn && (
+      <div className="col-12 mb-3">
+        <DrugForm />
+      </div>
+    )}
+    <div className={`col-12 mb-3 ${loggedIn && 'col-lg-8'}`}>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <DrugList thoughts={drugs} title="Start adding your medicines!" />
+      )}
+    </div>
+       
     </div>
   </main>
   );

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
-import { ADD_USER } from '../utils/mutations';
-import Authentication from '../utils/authentication';
+import { LOGIN_USER } from '../utils/mutations';
+import Auth from '../utils/auth';
 
-const Register = () => {
-  const [formState, setFormState] = useState({ username: '', password: '' });
+const Login = (props) => {
+  const [formState, setFormState] = useState({ email: '', password: '' });
 
-  const [addUser, { error }] = useMutation(ADD_USER); 
+  // initialize mutation
+  const [login, { error }] = useMutation(LOGIN_USER);
 
   // update state based on form input changes
   const handleChange = (event) => {
@@ -20,37 +21,35 @@ const Register = () => {
 
   // submit form
   const handleFormSubmit = async event => {
-    event.preventDefault();
+  event.preventDefault();
 
-    // use try/catch instead of promises to handle errors
-    try {
-      const { data } = await addUser({
-        variables: { ...formState }
-      });
-    
-      Authentication.login(data.addUser.token);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  try {
+    const { data } = await login({
+      variables: { ...formState }
+    });
+    // set our token to localStorage and bring us back to homepage if login is successful
+    Auth.login(data.login.token);
+  } catch (e) {
+    console.error(e);
+  }
+};
 
   return (
     <main className='flex-row justify-center mb-4'>
       <div className='col-12 col-md-6'>
         <div className='card'>
-          <h4 className='card-header'>Sign Up</h4>
+          <h4 className='card-header'>Login</h4>
           <div className='card-body'>
             <form onSubmit={handleFormSubmit}>
               <input
                 className='form-input'
-                placeholder='Your username'
-                name='username'
-                type='username'
-                id='username'
-                value={formState.username}
+                placeholder='Your email'
+                name='email'
+                type='email'
+                id='email'
+                value={formState.email}
                 onChange={handleChange}
               />
-              
               <input
                 className='form-input'
                 placeholder='******'
@@ -63,7 +62,7 @@ const Register = () => {
               <button className='btn d-block w-100' type='submit'>
                 Submit
               </button>
-              {error && <div>Registration failed</div>}
+              {error && <div>Login failed</div>}
             </form>
           </div>
         </div>
@@ -72,4 +71,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
