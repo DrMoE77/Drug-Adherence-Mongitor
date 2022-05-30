@@ -2,6 +2,7 @@
 const { gql } = require('apollo-server-express');
 
 // create our typeDefs
+// drug is a custom data type
 const typeDefs = gql`
 
   type User {
@@ -13,18 +14,11 @@ const typeDefs = gql`
 
   type Drug {
     _id: ID
-    drug_name: String
+    drugText: String
+    dosage: String
+    freq: String
     createdAt: String
     username: String
-    dosage: Int
-    freq: Int
-    reactions: [Reason]
-  }
-
-  type Reason {
-    _id: ID
-    reason: String
-    createdAt: String
   }
 
   type Query {
@@ -38,8 +32,7 @@ const typeDefs = gql`
   type Mutation {
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
-    addDrug(drug_name: String!, dosage: String!, freq: String!): Drug
-    addReaction(drugId: ID!, reason: String!): Drug
+    addDrug(drugText: String!, dosage: String!, freq:String!): Drug
   }
 
   type Auth {

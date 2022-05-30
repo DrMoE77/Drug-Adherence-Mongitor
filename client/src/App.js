@@ -43,7 +43,6 @@ function App() {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile/:username?" component={Profile} />
             <Route exact path="/drug/:id" component={SingleDrug} />
-
             <Route component={NoMatch} />
           </Switch>
           </div>

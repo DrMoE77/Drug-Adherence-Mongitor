@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const DrugList = ({ drugs, title }) => {
-  
 
+  
   return (
     <div>
       <h3>{title}</h3>
@@ -16,18 +16,17 @@ const DrugList = ({ drugs, title }) => {
                 style={{ fontWeight: 700 }}
                 className="text-light"
             >
-                {drug.username}
+                
             </Link>{' '}
-            medicine on {drug.createdAt}
+            medicine added on {drug.createdAt}
             </p>
             <div className="card-body">
-            <Link to={`drug/${drug._id}`}>
-                <p>{drug.drug_name}</p>
-                <p className="mb-0">
-                Reactions: {drug.reactionCount} || Click to{' '}
-                
+            <Link to={`/drug/${drug._id}`}>
+                <p>{drug.drugText} <span>{drug.dosage}</span> <span>Frequency: {drug.freq}</span> 
                 </p>
+                
             </Link>
+              
             </div>
           </div>
         ))}

@@ -27,35 +27,16 @@ export const ADD_USER = gql`
 `;
 
 
-// add thought
+// add drug
 export const ADD_DRUG = gql`
-  mutation addDrug($drug_name: String!, $dosage:String!, $freq: String!) {
-    addDrug(drug_name: $drug_name, dosage: $dosage, freq:$freq) {
+mutation addDrug($drugText: String!, $dosage:String!, $freq: String!) {
+  addDrug(drugText: $drugText, dosage: $dosage, freq:$freq) {
       _id
-      drug_name
-      createdAt
-      username
+      drugText
       dosage
       freq
-      reactions {
-        _id
-        reason
-        createdAT
-      }
-    }
-  }
-`;
-
-// add reaction
-export const ADD_REACTION = gql`
-  mutation addReaction($drugId: ID!, $reason: String!) {
-    addReaction(drugId: $drugId, reason: $reason) {
-      _id
-      reactions {
-        _id
-        reason
-        createdAT
-      }
+      createdAt
+      username
     }
   }
 `;

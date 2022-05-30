@@ -1,39 +1,29 @@
 import gql from 'graphql-tag';
 
-// query for all thoughts
+// query for all drugs
 export const QUERY_DRUGS = gql`
   query drugs($username: String) {
     drugs(username: $username) {
       _id
-      drug_name
-      createdAt
-      username
+      drugText
       dosage
       freq
-      reactions {
-        _id
-        createdAt
-        reason
-      }
+      createdAt
+      username
     }
   }
 `;
 
-// query for single thought 
+// query for single drug 
 export const QUERY_DRUG = gql`
   query drug($id: ID!) {
     drug(_id: $id) {
       _id
-      drug_name
-      createdAt
-      username
+      drugText
       dosage
       freq
-      reactions {
-        _id
-        createdAt
-        reason
-      }
+      createdAt
+      username
     }
   }
 `;
@@ -45,15 +35,45 @@ export const QUERY_USER = gql`
       _id
       username
       email
-      
       drugs {
         _id
-        drug_name
-        createdAt
+        drugText
         dosage
         freq
+        createdAt
+        username
       }
     }
   }
 `;
 
+// queries for logged in users -- we don't need to pass in data
+export const QUERY_ME = gql`
+  {
+    me {
+      _id
+      username
+      email
+      drugs {
+        _id
+        drugText
+        dosage
+        freq
+        createdAt
+        username
+      }
+    }
+  }
+`;
+
+
+// queries for logged in users homepage
+export const QUERY_ME_BASIC = gql`
+  {
+    me {
+      _id
+      username
+      email
+    }
+  }
+`;

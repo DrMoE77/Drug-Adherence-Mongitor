@@ -9,8 +9,7 @@ const resolvers = {
           const userData = await User.findOne({_id: context.user._id})
           .select('-__v -password')
           .populate('drugs')
-          .populate('reactions');
-
+          
           return userData
         }
         throw new AuthenticationError('Not logged in')
@@ -28,15 +27,13 @@ const resolvers = {
       users: async () => {
         return User.find()
         .select('__v -password')
-        .populate('drugs')
-        .populate('reactions');
+        .populate('drugs');
       },
       // get user by username
       user: async (parent, {username }) => {
         return User.findOne ({ username })
         .select('-__v -password')
-        .populate('drugs')
-        .populate('reactions');
+        .populate('drugs');
       }
       },
       Mutation: {
@@ -61,14 +58,14 @@ const resolvers = {
               const token = signToken(user)
               return { token, user }; 
           },
-            addDrug: async (parent, { drug_name, dosage, freq }, context) => {
+            addDrug: async (parent, args, context) => {
             if (context.user) {
-            const drug = await Drug.create({ drug_name, dosage, freq, username: context.user.username });
+            const drug = await Drug.create({ ...args, username: context.user.username });
         
             await User.findByIdAndUpdate(
                 { _id: context.user._id },
-                { $push: { drugs: { drug_name, dosage, freq, drugs: drug._id  } } },
-                { new: true, runValidators: true }
+                { $push: { drugs: drug._id } },
+                { new: true }
             );
         
             return drug;
@@ -76,21 +73,7 @@ const resolvers = {
         
             throw new AuthenticationError('You need to be logged in!');
         },
-        addReaction: async (parent, { drugId, reason }, context) => {
-            if (context.user) {
-              const updatedDrug = await Drug.findOneAndUpdate(
-                { _id: drugId },
-                { $push: { reactions: { reason, username: context.user.username } } },
-                { new: true, runValidators: true }
-              );
-          
-              return updatedDrug;
-            }
-          
-            throw new AuthenticationError('You need to be logged in!');
-          },
-         
-        }
+      }
 };
 
   

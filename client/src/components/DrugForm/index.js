@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_DRUG } from '../../utils/mutations';
-import { QUERY_DRUGS, QUERY_ME } from '../../utils/queries';
+import { QUERY_DRUGS, QUERY_USER} from '../../utils/queries';
 
 
 const DrugForm = () => {
-    const [drug_name, setDrugText] = useState('');
-    const [dosage, setDosageText] = useState('');
-    const [freq, setFreqText] = useState('');
-    
 
-    // getting ID from Query_Thoughts so that Apollo Client can update from the cache array for profile/homepage
+  var ansYes = 0
+  var adh = 0
+  const freqInput = ""
+
+  const [drugText, setDrugText] = useState('');
+  const [dosage, setDosageText] = useState('');
+  const [freq, setFreqText] = useState('');
+
+    // getting ID from Query_drugs so that Apollo Client can update from the cache array for profile/homepage
     const [addDrug, { error }] = useMutation(ADD_DRUG, {
         update(cache, { data: { addDrug } }) {
           try {
@@ -24,7 +28,12 @@ const DrugForm = () => {
             console.error(e);
           }
       
-          
+          // update me object's cache, appending new drug to the end of the array
+          const { me } = cache.readQuery({ query: QUERY_USER });
+          cache.writeQuery({
+            query: QUERY_USER,
+            data: { me: { ...me, drugs: [...me.drugs, addDrug] } }
+          });
         }
     });
 
@@ -34,50 +43,69 @@ const DrugForm = () => {
         event.preventDefault();
       
         try {
-          // add thought to database
+          // add drug to database
           await addDrug({
-            variables: { drug_name, dosage, freq }
+            variables: { drugText, dosage, freq }
           });
       
           // clear form value
           setDrugText('');
           setDosageText('');
           setFreqText('');
-         
+          
         } catch (e) {
           console.error(e);
         }
     };
 
+    function yes_button(){
+      document.getElementById("intakeYes").style.display = "none"
+      document.getElementById("intakeNo").style.display = "none"
+      document.getElementById("ask").innerHTML = "Good job! Keep it up!"
+      
+      
+    }
+
+    function no_button(){
+      document.getElementById("intakeYes").style.display = "none"
+      document.getElementById("intakeNo").style.display = "none"
+      document.getElementById("ask").innerHTML = "Make sure you don't miss any medicine!"
+    }
+
   return (
     <div>
         
-      <form className="flex-row justify-center justify-space-between-md align-stretch" onSubmit={handleFormSubmit}>
-        <textarea
-        placeholder="Type the name of the medicine here..."
-        value={drug_name}
+      <form className="justify-center justify-space-between-md ]" onSubmit={handleFormSubmit}>
+        <p style={{marginTop:50}}>
+          Add More Medicines:
+        </p>
+        <input
+        placeholder="Medicine name..."
+        value={drugText}
         className="form-input col-12 col-md-9"
         onChange={(event) => { setDrugText(event.target.value) }}
-        ></textarea>
+        ></input>
         <input
-        placeholder="What is the dosage?"
+        placeholder="Dosage..."
         value={dosage}
         className="form-input col-12 col-md-9"
         onChange={(event) => { setDosageText(event.target.value) }}
         ></input>
         <input
-        placeholder="Frequency of intake (per day)?"
+        placeholder="Frequency per day..."
         value={freq}
         className="form-input col-12 col-md-9"
         onChange={(event) => { setFreqText(event.target.value) }}
         ></input>
 
-        <button className="btn col-12 col-md-3" type="submit">
-          Add Medicine
+        <button className="btn" type="submit">
+          Add Medicine!
         </button>
+
       </form>
     </div>
   );
 };
+
 
 export default DrugForm;

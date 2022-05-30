@@ -1,32 +1,29 @@
 import React from 'react';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_DRUGS} from '../utils/queries';
-
+import { QUERY_DRUGS, QUERY_ME_BASIC  } from '../utils/queries';
+import DrugList from '../components/DrugList';
 import Auth from '../utils/auth';
-
+import DrugForm from '../components/DrugForm';
 
 const Home = () => {
-  // use useQuery hook to make query request
-  const { loading, data } = useQuery(QUERY_DRUGS);
-
   
-  const drugs = data?.drugs || [];
-  console.log(drugs);
-
   // logged in users -- if logged in the variable will be true 
   const loggedIn = Auth.loggedIn();
 
   return (
     <main>
     <div className="flex-row justify-space-between">
-    <p>
-      Welcome to the Drug Adherence Monitor, where you can create a digital list of your medicines and monitor it regularly.
+    <h4 style={{marginTop:50}}>
+      Welcome to the Medical Adherence Monitor, where you can create a digital list of your medicines and monitor it regularly.
       
-    </p>
+    </h4>
+
+  
        
     </div>
   </main>
   );
 };
+
 
 export default Home;
