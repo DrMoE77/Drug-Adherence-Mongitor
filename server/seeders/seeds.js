@@ -41,7 +41,7 @@ db.once('open', async () => {
 
   // create comments
   for (let i = 0; i < 100; i += 1) {
-    const reactionText = faker.lorem.words(Math.round(Math.random() * 20) + 1);
+    const reason = faker.lorem.words(Math.round(Math.random() * 20) + 1);
 
     const randomUserIndex = Math.floor(Math.random() * createdUsers.ops.length);
     const { username } = createdUsers.ops[randomUserIndex];
@@ -51,7 +51,7 @@ db.once('open', async () => {
 
     await Drug.updateOne(
       { _id: drugId },
-      { $push: { reactions: { reactionText, username } } },
+      { $push: { reactions: { reason, username } } },
       { runValidators: true }
     );
   }

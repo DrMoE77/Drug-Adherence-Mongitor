@@ -13,7 +13,7 @@ export const QUERY_DRUGS = gql`
       reactions {
         _id
         createdAt
-        reactionText
+        reason
       }
     }
   }
@@ -32,7 +32,7 @@ export const QUERY_DRUG = gql`
       reactions {
         _id
         createdAt
-        reactionText
+        reason
       }
     }
   }
@@ -57,37 +57,3 @@ export const QUERY_USER = gql`
   }
 `;
 
-// queries for logged in users -- we don't need to pass in data
-export const QUERY_ME = gql`
-  {
-    me {
-      _id
-      username
-      email
-      friendCount
-      drugs {
-        _id
-        drug_name
-        createdAt
-        reactions {
-          _id
-          createdAt
-          reactionText
-        }
-      }
-      
-    }
-  }
-`;
-
-// queries for logged in users homepage
-export const QUERY_ME_BASIC = gql`
-  {
-    me {
-      _id
-      username
-      email
-      
-    }
-  }
-`;

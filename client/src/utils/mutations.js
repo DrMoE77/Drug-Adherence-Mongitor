@@ -26,22 +26,8 @@ export const ADD_USER = gql`
   }
 `;
 
-// adding friends
-export const ADD_FRIEND = gql`
-  mutation addFriend($id: ID!) {
-    addFriend(friendId: $id) {
-      _id
-      username
-      friendCount
-      friends {
-        _id
-        username
-      }
-    }
-  }
-`;
 
-// add drug
+// add thought
 export const ADD_DRUG = gql`
   mutation addDrug($drug_name: String!, $dosage:String!, $freq: String!) {
     addDrug(drug_name: $drug_name, dosage: $dosage, freq:$freq) {
@@ -53,8 +39,8 @@ export const ADD_DRUG = gql`
       freq
       reactions {
         _id
-        createdAt
-        reactionText
+        reason
+        createdAT
       }
     }
   }
@@ -62,13 +48,13 @@ export const ADD_DRUG = gql`
 
 // add reaction
 export const ADD_REACTION = gql`
-  mutation addReaction($drugId: ID!, $reactionText: String!) {
-    addReaction(drugId: $drugId, reactionText: $reactionText) {
+  mutation addReaction($drugId: ID!, $reason: String!) {
+    addReaction(drugId: $drugId, reason: $reason) {
       _id
       reactions {
         _id
-        createdAt
-        reactionText
+        reason
+        createdAT
       }
     }
   }

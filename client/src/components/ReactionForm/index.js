@@ -4,7 +4,7 @@ import { ADD_REACTION } from '../../utils/mutations';
 
 
 const ReactionForm = ({ drugId }) => {
-const [reactionText, setBody] = useState('');
+const [reason, setBody] = useState('');
 const [characterCount, setCharacterCount] = useState(0);
 const [addReaction, { error }] = useMutation(ADD_REACTION);
 
@@ -20,7 +20,7 @@ const handleFormSubmit = async event => {
 
   try {
     await addReaction({
-      variables: {reactionText, drugId}
+      variables: {reason, drugId}
     })
     setBody('');
     setCharacterCount(0);
@@ -31,18 +31,15 @@ const handleFormSubmit = async event => {
 
   return (
     <div>
-        <p className={`m-0 ${characterCount === 280 || error ? 'text-error' : ''}`}>
-        Character Count: {characterCount}/280
-        {error && <span className="ml-2">Something went wrong...</span>}
-      </p>
+        
       <form className="flex-row justify-center justify-space-between-md align-stretch" onSubmit={handleFormSubmit}>
         <textarea
-          placeholder="Type a reason for not taking medicine..."
-          value={reactionText}
+          placeholder="What was your reason for not taking the medicine..."
+          value={reason}
           className="form-input col-12 col-md-9"
           onChange={handleChange}
         ></textarea>
-
+        
         <button className="btn col-12 col-md-3" type="submit">
           Submit
         </button>

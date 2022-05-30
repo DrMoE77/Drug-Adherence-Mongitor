@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/react-hooks';
-import { QUERY_DRUG, QUERY_ME } from '../utils/queries';
+import { QUERY_DRUG } from '../utils/queries';
 import ReactionList from '../components/ReactionList';
 import ReactionForm from '../components/ReactionForm';
 import Auth from "../utils/auth";
@@ -31,10 +31,12 @@ const SingleDrug = props => {
           drug on {drug.createdAt}
         </p>
         <div className="card-body">
-          <p>{drug.drugText}</p>
+          <p>{drug.drug_name}</p>
+          <p>{drug.dosage}</p>
+          <p>{drug.freq}</p>
         </div>
       </div>
-      
+      {<ReactionList reactions={drug.reactions} />}
       {Auth.loggedIn() && <ReactionForm drugId={drug._id} />}
     </div>
   );

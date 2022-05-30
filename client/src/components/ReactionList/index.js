@@ -6,13 +6,13 @@ const ReactionList = ({ reactions }) => {
   return (
     <div className="card mb-3">
     <div className="card-header">
-        <span className="text-light">Reasons for not taking medicine</span>
+        <span className="text-light">Reasons for not taking the medicine</span>
     </div>
     <div className="card-body">
         {reactions &&
         reactions.map(reaction => (
             <p className="pill mb-3" key={reaction._id}>
-            {reaction.reactionText} {'// '}
+            {reaction.reason} {'// '}
             <Link to={`/profile/${reaction.username}`} style={{ fontWeight: 700 }}>
                 {reaction.username} on {reaction.createdAt}
             </Link>

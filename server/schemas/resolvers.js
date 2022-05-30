@@ -76,11 +76,11 @@ const resolvers = {
         
             throw new AuthenticationError('You need to be logged in!');
         },
-        addReaction: async (parent, { drugId, reactionText }, context) => {
+        addReaction: async (parent, { drugId, reason }, context) => {
             if (context.user) {
               const updatedDrug = await Drug.findOneAndUpdate(
                 { _id: drugId },
-                { $push: { reactions: { reactionText, username: context.user.username } } },
+                { $push: { reactions: { reason, username: context.user.username } } },
                 { new: true, runValidators: true }
               );
           

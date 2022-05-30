@@ -18,12 +18,15 @@ const DrugList = ({ drugs, title }) => {
             >
                 {drug.username}
             </Link>{' '}
-            drug on {drug.createdAt}
+            medicine on {drug.createdAt}
             </p>
             <div className="card-body">
-            <Link to={`/drug/${drug._id}`}>
+            <Link to={`drug/${drug._id}`}>
                 <p>{drug.drug_name}</p>
+                <p className="mb-0">
+                Reactions: {drug.reactionCount} || Click to{' '}
                 
+                </p>
             </Link>
             </div>
           </div>

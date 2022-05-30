@@ -1,27 +1,36 @@
 {
   "name": "dam",
   "version": "1.0.0",
-  "description": "Full stack MERN app",
+  "description": "Full stack pill reminder application using the MERN stack.",
   "main": "server/server.js",
   "scripts": {
     "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
     "start:prod": "cd server && npm start",
-    "server": "nodemon index.js --ignore client",
     "start:dev": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
     "build": "cd client && npm run build",
     "heroku-postbuild": "cd client && npm run build"
   },
-  
-  "keywords": [],
+  "repository": {
+    "type": "git"
+    
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
   "author": "",
   "license": "MIT",
   
   "dependencies": {
-    "if-env": "^1.0.4"
+    "if-env": "^1.0.4",
+    "serve": "^13.0.2"
   },
   "devDependencies": {
     "concurrently": "^5.2.0"
+  },
+  "engines": {
+    "node": "8.1.2"
   }
 }
