@@ -33,7 +33,6 @@ const typeDefs = gql`
     login(email: String!, password: String!): Auth
     addUser(username: String!, email: String!, password: String!): Auth
     addDrug(drugText: String!, dosage: String!, freq:String!): Drug
-    removeDrug(drugId: ID!): Drug
   }
 
   type Auth {

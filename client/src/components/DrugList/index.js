@@ -1,22 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { REMOVE_DRUG } from '../../utils/mutations';
 
 const DrugList = ({ drugs, title }) => {
 
-  const [removeDrug, { error }] = useMutation(REMOVE_DRUG);
-
-  const handleRemoveDrug = async (drugId) => {
-    try {
-      const { data } = await removeDrug({
-        variables: { drugId },
-      });
-      
-    } catch (err) {
-      console.error(err);
-    }
-  };
   
   return (
     <div>
@@ -37,18 +23,9 @@ const DrugList = ({ drugs, title }) => {
             <div className="card-body">
             <Link to={`/drug/${drug._id}`}>
                 <p>{drug.drugText} <span>{drug.dosage}</span> <span>Frequency: {drug.freq}</span> 
-                
                 </p>
                 
             </Link>
-
-            <button className='btn'
-                type="submit"
-                
-                onClick={() => handleRemoveDrug(drug._id)}
-              >Delete medicine
-              </button>
-                
               
             </div>
           </div>

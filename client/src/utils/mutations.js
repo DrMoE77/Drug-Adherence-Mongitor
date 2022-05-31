@@ -40,15 +40,3 @@ mutation addDrug($drugText: String!, $dosage:String!, $freq: String!) {
     }
   }
 `;
-
-// delete a drug
-export const REMOVE_DRUG = gql`
-mutation removeDrug($drugId: ID!) {
-  removeDrug(drugId: $drugId) {
-    _id
-    drugText
-    dosage
-    freq
-  }
-}
-`;

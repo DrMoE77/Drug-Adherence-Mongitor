@@ -73,12 +73,6 @@ const resolvers = {
         
             throw new AuthenticationError('You need to be logged in!');
         },
-
-        removeDrug: async (parent, { drugId }) => {
-          return Drug.findOneAndDelete({ _id: drugId });
-          
-        
-        }
       }
 };
 
