@@ -1,38 +1,27 @@
-// import the gql tagged template function
 const { gql } = require('apollo-server-express');
 
-// create our typeDefs
-// drug is a custom data type
 const typeDefs = gql`
-
   type User {
     _id: ID
     username: String
     email: String
-    drugs: [Drug]
+    password: String
+    thoughts: [Thought]!
   }
 
-  type Drug {
+  type Thought {
     _id: ID
-    drugText: String
-    dosage: String
-    freq: String
+    thoughtText: String
+    thoughtAuthor: String
     createdAt: String
-    username: String
+    comments: [Comment]!
   }
 
-  type Query {
-    me: User
-    users: [User]
-    user(username: String!): User
-    drugs(username: String): [Drug]
-    drug(_id: ID!): Drug
-  }
-
-  type Mutation {
-    login(email: String!, password: String!): Auth
-    addUser(username: String!, email: String!, password: String!): Auth
-    addDrug(drugText: String!, dosage: String!, freq:String!): Drug
+  type Comment {
+    _id: ID
+    commentText: String
+    commentAuthor: String
+    createdAt: String
   }
 
   type Auth {
@@ -40,7 +29,22 @@ const typeDefs = gql`
     user: User
   }
 
+  type Query {
+    users: [User]
+    user(username: String!): User
+    thoughts(username: String): [Thought]
+    thought(thoughtId: ID!): Thought
+    me: User
+  }
+
+  type Mutation {
+    addUser(username: String!, email: String!, password: String!): Auth
+    login(email: String!, password: String!): Auth
+    addThought(thoughtText: String!): Thought
+    addComment(thoughtId: ID!, commentText: String!): Thought
+    removeThought(thoughtId: ID!): Thought
+    removeComment(thoughtId: ID!, commentId: ID!): Thought
+  }
 `;
 
-// export the typeDefs
 module.exports = typeDefs;

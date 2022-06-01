@@ -1,29 +1,37 @@
 import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { QUERY_DRUGS, QUERY_ME_BASIC  } from '../utils/queries';
-import DrugList from '../components/DrugList';
-import Auth from '../utils/auth';
-import DrugForm from '../components/DrugForm';
+import { useQuery } from '@apollo/client';
+
+import ThoughtList from '../components/ThoughtList';
+import ThoughtForm from '../components/ThoughtForm';
+
+import { QUERY_THOUGHTS } from '../utils/queries';
 
 const Home = () => {
-  
-  // logged in users -- if logged in the variable will be true 
-  const loggedIn = Auth.loggedIn();
+  const { loading, data } = useQuery(QUERY_THOUGHTS);
+  const thoughts = data?.thoughts || [];
 
   return (
     <main>
-    <div className="flex-row justify-space-between">
-    <h4 style={{marginTop:50}}>
-      Welcome to the Medical Adherence Monitor, where you can create a digital list of your medicines and monitor it regularly.
-      
-    </h4>
-
-  
-       
-    </div>
-  </main>
+      <div className="flex-row justify-center">
+        <div
+          className="col-12 col-md-10 mb-3 p-3"
+          style={{ border: '1px dotted #1a1a1a' }}
+        >
+          <ThoughtForm />
+        </div>
+        <div className="col-12 col-md-8 mb-3">
+          {loading ? (
+            <div>Loading...</div>
+          ) : (
+            <ThoughtList
+              thoughts={thoughts}
+              title="Some Feed for Thought(s)..."
+            />
+          )}
+        </div>
+      </div>
+    </main>
   );
 };
-
 
 export default Home;

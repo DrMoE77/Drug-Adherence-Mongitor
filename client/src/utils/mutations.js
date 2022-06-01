@@ -1,6 +1,5 @@
-import gql from 'graphql-tag';
+import { gql } from '@apollo/client';
 
-// mutation for logged in user 
 export const LOGIN_USER = gql`
   mutation login($email: String!, $password: String!) {
     login(email: $email, password: $password) {
@@ -13,7 +12,6 @@ export const LOGIN_USER = gql`
   }
 `;
 
-// mutation for user to sign up
 export const ADD_USER = gql`
   mutation addUser($username: String!, $email: String!, $password: String!) {
     addUser(username: $username, email: $email, password: $password) {
@@ -26,17 +24,33 @@ export const ADD_USER = gql`
   }
 `;
 
-
-// add drug
-export const ADD_DRUG = gql`
-mutation addDrug($drugText: String!, $dosage:String!, $freq: String!) {
-  addDrug(drugText: $drugText, dosage: $dosage, freq:$freq) {
+export const ADD_THOUGHT = gql`
+  mutation addThought($thoughtText: String!) {
+    addThought(thoughtText: $thoughtText) {
       _id
-      drugText
-      dosage
-      freq
+      thoughtText
+      thoughtAuthor
       createdAt
-      username
+      comments {
+        _id
+        commentText
+      }
+    }
+  }
+`;
+
+export const ADD_COMMENT = gql`
+  mutation addComment($thoughtId: ID!, $commentText: String!) {
+    addComment(thoughtId: $thoughtId, commentText: $commentText) {
+      _id
+      thoughtText
+      thoughtAuthor
+      createdAt
+      comments {
+        _id
+        commentText
+        createdAt
+      }
     }
   }
 `;
