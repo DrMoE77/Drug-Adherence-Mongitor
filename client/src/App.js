@@ -1,43 +1,33 @@
 import React from 'react';
-import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  createHttpLink,
-} from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Home from './pages/Home';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
-import SingleThought from './pages/SingleThought';
-import Profile from './pages/Profile';
+
+// react component to provide data to all of the other components
+import { ApolloProvider } from '@apollo/react-hooks';
+// get the data when we are ready to use it 
+import ApolloClient from 'apollo-boost';
+
 import Header from './components/Header';
 import Footer from './components/Footer';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import NoMatch from './pages/NoMatch';
+import SingleDrug from './pages/SingleDrug';
+import Profile from './pages/Profile';
+import Signup from './pages/Signup';
 
-// Construct our main GraphQL API endpoint
-const httpLink = createHttpLink({
-  uri: '/graphql',
-});
-
-// Construct request middleware that will attach the JWT token to every request as an `authorization` header
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = localStorage.getItem('id_token');
-  // return the headers to the context so httpLink can read them
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `Bearer ${token}` : '',
-    },
-  };
-});
-
+// takes in token from localStorage before each requests
 const client = new ApolloClient({
-  // Set up our client to execute the `authLink` middleware prior to making the request to our GraphQL API
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
+  request: operation => {
+    const token = localStorage.getItem('id_token');
+
+    operation.setContext({
+      headers: {
+        authorization: token ? `Bearer ${token}` : ''
+      }
+    });
+  },
+  uri: '/graphql'
 });
 
 function App() {
@@ -47,32 +37,14 @@ function App() {
         <div className="flex-column justify-flex-start min-100-vh">
           <Header />
           <div className="container">
-            <Routes>
-              <Route 
-                path="/"
-                element={<Home />}
-              />
-              <Route 
-                path="/login"
-                element={<Login />}
-              />
-              <Route 
-                path="/signup"
-                element={<Signup />}
-              />
-              <Route 
-                path="/me"
-                element={<Profile />}
-              />
-              <Route 
-                path="/profiles/:username"
-                element={<Profile />}
-              />
-              <Route 
-                path="/thoughts/:thoughtId"
-                element={<SingleThought />}
-              />
-            </Routes>
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/profile/:username?" component={Profile} />
+            <Route exact path="/drug/:id" component={SingleDrug} />
+            <Route component={NoMatch} />
+          </Switch>
           </div>
           <Footer />
         </div>
