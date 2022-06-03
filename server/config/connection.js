@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb+srv://"DrMoE77:Yasseen20157"@cluster0.qusi2.mongodb.net/?retryWrites=true&w=majority', {
+mongoose.connect(process.env.MONGODB_URI || http://127.0.0.1:27017/welcomeU-db, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useCreateIndex: true,
