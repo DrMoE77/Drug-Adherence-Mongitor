@@ -30,9 +30,8 @@ const SingleDrug = props => {
           medicine added on {drug.createdAt}
         </p>
         <div className="card-body">
-          <p>{drug.drugText}</p>
-          <p>{drug.dosage}</p>
-          <p>{drug.freq}</p>
+          <p>{drug.drugText} <span> with dosage: {drug.dosage}</span> <span> and frequency: {drug.freq}</span></p>
+          
         </div>
       </div>
       {Auth.loggedIn() && <DrugForm drugId={drug._id} />}

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { REMOVE_DRUG } from '../../utils/mutations';
 
-const DrugList = ({ drugs, title }) => {
+
+const DrugList = ({ drugs,refetchPosts  }) => {
 
   const [removeDrug, { error }] = useMutation(REMOVE_DRUG);
 
@@ -12,7 +13,7 @@ const DrugList = ({ drugs, title }) => {
       const { data } = await removeDrug({
         variables: { drugId },
       });
-      
+      refetchPosts()
     } catch (err) {
       console.error(err);
     }
@@ -20,7 +21,6 @@ const DrugList = ({ drugs, title }) => {
   
   return (
     <div>
-      <h3>{title}</h3>
       {drugs &&
         drugs.map(drug => (
           <div key={drug._id} className="card mb-3">
@@ -45,7 +45,10 @@ const DrugList = ({ drugs, title }) => {
             <button className='btn'
                 type="submit"
                 
-                onClick={() => handleRemoveDrug(drug._id)}
+                onClick={() => {
+                  handleRemoveDrug(drug._id);
+                  window.location.reload();
+                }}
               >Delete medicine
               </button>
                 

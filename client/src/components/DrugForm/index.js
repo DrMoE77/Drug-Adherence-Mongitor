@@ -6,13 +6,9 @@ import { QUERY_DRUGS, QUERY_USER} from '../../utils/queries';
 
 const DrugForm = () => {
 
-  var ansYes = 0
-  var adh = 0
-  const freqInput = ""
-
-  const [drugText, setDrugText] = useState('');
-  const [dosage, setDosageText] = useState('');
-  const [freq, setFreqText] = useState('');
+  const [drugText, setDrugText] = React.useState('');
+  const [dosage, setDosageText] = React.useState('');
+  const [freq, setFreqText] = React.useState('');
 
     // getting ID from Query_drugs so that Apollo Client can update from the cache array for profile/homepage
     const [addDrug, { error }] = useMutation(ADD_DRUG, {
@@ -58,20 +54,7 @@ const DrugForm = () => {
         }
     };
 
-    function yes_button(){
-      document.getElementById("intakeYes").style.display = "none"
-      document.getElementById("intakeNo").style.display = "none"
-      document.getElementById("ask").innerHTML = "Good job! Keep it up!"
-      
-      
-    }
-
-    function no_button(){
-      document.getElementById("intakeYes").style.display = "none"
-      document.getElementById("intakeNo").style.display = "none"
-      document.getElementById("ask").innerHTML = "Make sure you don't miss any medicine!"
-    }
-
+   
   return (
     <div>
         
@@ -98,7 +81,7 @@ const DrugForm = () => {
         onChange={(event) => { setFreqText(event.target.value) }}
         ></input>
 
-        <button className="btn" type="submit">
+        <button onClick={() => {window.location.reload()}} className="btn" type="submit">
           Add Medicine!
         </button>
 
