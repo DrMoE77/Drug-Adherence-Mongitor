@@ -12,9 +12,7 @@
     "build": "cd client && npm run build"
     
   },
-  "engines": {
-    "node": "8.1.2"
-    },
+ 
   
   "keywords": [],
   "author": "",
